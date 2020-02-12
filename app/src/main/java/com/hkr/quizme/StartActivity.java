@@ -10,13 +10,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity {
     private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_start);
         mContext = this;
 
         AnimateBell();
@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(MainActivity.this, Log_In.class);
+                Intent i = new Intent(StartActivity.this, Log_In.class);
                 startActivity(i);
                 finish();
             }
-        }, 3500);
+        }, 3000);
     }
 
     public void AnimateBell() {
