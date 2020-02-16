@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/take_quiz_icon"
+            android:title="@string/menu_take_quiz" />
+
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/create_quiz_icon"
+            android:title="@string/menu_create_quiz" />
+        <item
+            android:id="@+id/nav_tools"
+            android:icon="@drawable/my_quizzes_icon"
+            android:title="@string/menu_my_quizzes" />
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/history_icon"
+            android:title="@string/menu_home" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/menu_share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_send" />
+        </menu>
+    </item>
+
+</menu>
