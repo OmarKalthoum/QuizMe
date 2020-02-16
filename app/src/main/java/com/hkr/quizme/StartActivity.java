@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        }, 3000);
+        }, 100);//3000
     }
 
     public void AnimateBell() {
