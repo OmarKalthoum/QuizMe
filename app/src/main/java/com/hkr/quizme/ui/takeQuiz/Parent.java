@@ -1,6 +1,7 @@
 package com.hkr.quizme.ui.takeQuiz;
 
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+import com.hkr.quizme.database_utils.entities.Subject;
 
 import java.util.List;
 import java.util.UUID;
