@@ -16,7 +16,7 @@ public class QuizDAO implements DAO<Quiz> {
     }
 
     @Override
-    public void insert(Quiz object) {
-
+    public boolean insert(Quiz object) {
+        return false;
     }
 }

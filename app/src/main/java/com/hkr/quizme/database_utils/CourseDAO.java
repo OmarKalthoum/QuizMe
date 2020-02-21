@@ -1,6 +1,8 @@
 package com.hkr.quizme.database_utils;
 
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hkr.quizme.database_utils.entities.Course;
 import com.hkr.quizme.database_utils.entities.Subject;
@@ -24,17 +26,20 @@ public class CourseDAO implements DAO<Course> {
     }
 
     @Override
-    public void insert(Course object) {
-
+    public boolean insert(Course object) {
+        return false;
     }
 
-    public List<Course> getCourses() {
+    public List<Course> getCourses(TextView textView) {
         APICommunicator communicator = new APICommunicator();
         JSONObject params = new JSONObject();
         JSONObject response = communicator.apiCallForResponse("/courses", "POST", params);
-        Log.d("JSON::::::", response.toString());
-        List<Course> result = new ArrayList<>();
+        Log.d("JSON::", response.toString());
         try {
+            if (!response.getBoolean("success")) {
+                textView.setText(response.getString("message"));
+            }
+            List<Course> result = new ArrayList<>();
             JSONArray courses = response.getJSONArray("courses");
             for (int i = 0; i < courses.length(); i++) {
                 JSONObject object = courses.getJSONObject(i);
@@ -58,7 +63,7 @@ public class CourseDAO implements DAO<Course> {
             }
             return result;
         } catch (JSONException exception) {
-            Log.d("JSON::::::", exception.toString());
+            Log.d("JSON::", exception.toString());
         }
         return null; // TODO: fucking dont do this
     }
