@@ -12,8 +12,6 @@
         android:label="@string/menu_take_quiz"
         tools:layout="@layout/fragment_take_quiz" />
 
-
-
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.hkr.quizme.ui.createQuiz.CreateQuizFragment"
@@ -34,13 +32,9 @@
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="com.hkr.quizme.ui.share.ShareFragment"
+        android:name="com.hkr.quizme.ui.aboutUs.AboutUsFragment"
         android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/fragment_about_us" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.hkr.quizme.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+
 </navigation>

@@ -16,6 +16,9 @@
     <string name="menu_take_quiz">Take Quiz</string>
     <string name="menu_create_quiz">Create Quiz</string>
     <string name="menu_my_quizzes">My Quizzes</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_share">About Us</string>
+
+    <string name="facebook_app_id">1239058189625752</string>
+    <string name="fb_login_protocol_scheme">fb1239058189625752</string>
+
 </resources>

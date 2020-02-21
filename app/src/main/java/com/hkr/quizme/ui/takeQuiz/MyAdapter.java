@@ -1,6 +1,7 @@
 package com.hkr.quizme.ui.takeQuiz;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+import com.hkr.quizme.Log_In;
+import com.hkr.quizme.QuizActivity;
 import com.hkr.quizme.R;
 
 import java.util.List;
@@ -52,6 +55,8 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
     @Override
     public void onClick(View v) {
         // TODO : START NEW ACTIVITY
-        Toast.makeText(v.getContext(), "Hej",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(v.getContext(), QuizActivity.class);
+      v.getContext().startActivity(intent);
+       // Toast.makeText(v.getContext(), "Hej",Toast.LENGTH_LONG).show();
     }
 }
