@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_alert_dialog"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="How would you rate your experience with this quiz"
+        android:textColor="#9C27B0"
+        android:textSize="13dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+        <ImageButton
+            android:id="@+id/one_rate_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+
+            android:layout_marginTop="76dp"
+            android:background="@drawable/one_emoji_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <ImageButton
+            android:id="@+id/two_rate_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="15dp"
+
+            android:layout_marginTop="76dp"
+            android:background="@drawable/two_emoji_icon"
+            app:layout_constraintStart_toEndOf="@id/one_rate_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <ImageButton
+
+            android:id="@+id/three_rate_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/three_emoji_icon"
+            app:layout_constraintStart_toEndOf="@id/two_rate_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <ImageButton
+            android:id="@+id/four_rate_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/four_emoji_icon"
+            app:layout_constraintStart_toEndOf="@id/three_rate_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <ImageButton
+            android:id="@+id/five_rate_icon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="76dp"
+
+            android:background="@drawable/five_icon_emoji"
+            app:layout_constraintStart_toEndOf="@id/four_rate_icon"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cancelBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:textColor="#9C27B0"
+        android:background="@drawable/button_round"
+        android:text="@android:string/cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
