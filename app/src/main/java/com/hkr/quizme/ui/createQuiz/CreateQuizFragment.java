@@ -23,13 +23,7 @@ public class CreateQuizFragment extends Fragment {
         createQuizViewModel =
                 ViewModelProviders.of(this).get(CreateQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_create_quiz, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        createQuizViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
 }
