@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -11,7 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Log_In extends AppCompatActivity implements View.OnClickListener {
@@ -19,27 +37,33 @@ public class Log_In extends AppCompatActivity implements View.OnClickListener {
     private EditText userNameInput, passwordInput;
     private Button logInBtn;
     private TextView signUpBtn;
-    private ImageView logInWithFBBtn, logoBtn;
+    private ImageView logoBtn;
+    private LoginButton logInWithFB;
+    private CallbackManager callbackManager;
+    private String firstName, lastName, id, email, profileImage;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log__in);
+        LoginManager.getInstance().logOut();
 
         //Initialize the views
         userNameInput = findViewById(R.id.userNameInput);
         passwordInput = findViewById(R.id.passwordInput);
         logInBtn = findViewById(R.id.signInBtn);
         signUpBtn = findViewById(R.id.signUpText);
-        logInWithFBBtn = findViewById(R.id.fbSignInBtn);
+        logInWithFB = findViewById(R.id.fbSignInBtn);
         logoBtn = findViewById(R.id.logo_image_log_in);
+
+        callbackManager = CallbackManager.Factory.create();
+        logInWithFB.setReadPermissions("public_profile");
+
 
         logoBtn.setOnClickListener(this);
         logInBtn.setOnClickListener(this);
         signUpBtn.setOnClickListener(this);
-        logInWithFBBtn.setOnClickListener(this);
-
 
     }
 
@@ -56,15 +80,12 @@ public class Log_In extends AppCompatActivity implements View.OnClickListener {
             startActivity(f);
         }
         if (v == signUpBtn) {
-            // TODO: Move to sign_up intent
+
             v.startAnimation(animation);
             Intent singUpIntent = new Intent(Log_In.this, SignUp.class);
             startActivity(singUpIntent);
         }
-        if (v == logInWithFBBtn) {
-            v.startAnimation(animation);
-            // TODO: If the user choose to log in with FB
-        }
+
         if (v == logoBtn) {
             //Shake the logo
             Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.shakeanimation);
@@ -73,8 +94,79 @@ public class Log_In extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    public static void playQuizMeSound(Context context){
+    public static void playQuizMeSound(Context context) {
         MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.quiz_me);
         mediaPlayer.start();
+    }
+
+    public void fb() {
+        logInWithFB.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    AccessTokenTracker tokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+
+            } else {
+                loadUserProfile(currentAccessToken);
+            }
+        }
+    };
+
+
+    public void loadUserProfile(AccessToken accessToken) {
+        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                try {
+                    firstName = object.getString("first_name");
+                    lastName = object.getString("last_name");
+                    email = object.getString("email");
+                    id = object.getString("id");
+                    profileImage = "https://graph.facebook.com/" + id + "/picture?type=large&redirect=true&width=600&height=600";
+
+                    Intent mainIntent = new Intent(logInBtn.getContext(), MainActivity.class);
+                    mainIntent.putExtra("fb", "yes");
+                    mainIntent.putExtra("firstName", firstName);
+                    mainIntent.putExtra("lastName", lastName);
+                    mainIntent.putExtra("email", email);
+                    mainIntent.putExtra("id", id);
+                    mainIntent.putExtra("profileImage", profileImage);
+                    System.out.println(firstName);
+                    startActivity(mainIntent);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "first_name, last_name, email, id");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 }

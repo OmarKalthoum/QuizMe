@@ -109,15 +109,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
 
-    <ImageView
+    <com.facebook.login.widget.LoginButton
         android:id="@+id/fbSignInBtn"
-        android:layout_width="286dp"
-        android:layout_height="84dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@+id/signUpText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/fb_login_logo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

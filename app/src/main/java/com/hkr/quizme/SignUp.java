@@ -62,7 +62,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
             // TODO: Open the gallery and add a pic
 
         }
-        if (v == logoBtn) {
+        if (v == logoBtn ) {
             //Shake the logo
             Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.shakeanimation);
             v.startAnimation(animation2);
