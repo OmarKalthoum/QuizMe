@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
-import com.hkr.quizme.Log_In;
 import com.hkr.quizme.QuizActivity;
 import com.hkr.quizme.R;
 
@@ -18,7 +16,7 @@ import java.util.List;
 
 public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, ChildViewHolder> implements View.OnClickListener {
 
-    LayoutInflater inflater;
+    private LayoutInflater inflater;
 
     public MyAdapter(Context context, List<ParentObject> parentItemList) {
         super(context, parentItemList);

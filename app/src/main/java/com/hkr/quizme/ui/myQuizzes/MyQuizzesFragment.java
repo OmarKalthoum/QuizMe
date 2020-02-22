@@ -18,8 +18,7 @@ public class MyQuizzesFragment extends Fragment {
 
     private MyQuizzesViewModel myQuizzesViewModel;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myQuizzesViewModel = ViewModelProviders.of(this).get(MyQuizzesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_quizzes, container, false);
         final TextView textView = root.findViewById(R.id.text_tools);

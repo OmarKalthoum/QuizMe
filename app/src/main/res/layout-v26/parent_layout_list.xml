@@ -32,7 +32,7 @@
             android:paddingBottom="2dp">
 
             <TextView
-                android:id="@+id/title_parent"
+                android:id="@+id/question_review_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

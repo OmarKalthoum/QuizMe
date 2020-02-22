@@ -102,17 +102,17 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     private void showRatingDialog() {
         final Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
 
-        Dialog builder = new Dialog(this);
-        builder.setContentView(R.layout.rating_feedback_alert_dialog_layout);
-        builder.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.rating_feedback_alert_dialog_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        final ImageButton one_rate_icon = builder.findViewById(R.id.one_rate_icon);
-        final ImageButton two_rate_icon = builder.findViewById(R.id.two_rate_icon);
-        final ImageButton three_rate_icon = builder.findViewById(R.id.three_rate_icon);
-        final ImageButton four_rate_icon = builder.findViewById(R.id.four_rate_icon);
-        final ImageButton five_rate_icon = builder.findViewById(R.id.five_rate_icon);
-        final Button caneclBtn = builder.findViewById(R.id.cancelBtn);
-        builder.setCancelable(false);
+        final ImageButton one_rate_icon = dialog.findViewById(R.id.one_rate_icon);
+        final ImageButton two_rate_icon = dialog.findViewById(R.id.two_rate_icon);
+        final ImageButton three_rate_icon = dialog.findViewById(R.id.three_rate_icon);
+        final ImageButton four_rate_icon = dialog.findViewById(R.id.four_rate_icon);
+        final ImageButton five_rate_icon = dialog.findViewById(R.id.five_rate_icon);
+        final Button caneclBtn = dialog.findViewById(R.id.cancelBtn);
+        dialog.setCancelable(false);
 
 
         caneclBtn.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +169,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        builder.show();
+        dialog.show();
 
     }
 
