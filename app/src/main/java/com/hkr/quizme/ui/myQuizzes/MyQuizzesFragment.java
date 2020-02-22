@@ -21,7 +21,7 @@ public class MyQuizzesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myQuizzesViewModel = ViewModelProviders.of(this).get(MyQuizzesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_quizzes, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
+        final TextView textView = root.findViewById(R.id.text_status);
         myQuizzesViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
