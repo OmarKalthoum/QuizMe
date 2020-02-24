@@ -25,6 +25,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.hkr.quizme.database_utils.entities.User;
+import com.hkr.quizme.global_data.CurrentUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,6 +81,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
             if (user == null) {
                 return;
             }
+            CurrentUser.getInstance().setUser(user);
             Intent f = new Intent(this, MainActivity.class);
             startActivity(f);
         }

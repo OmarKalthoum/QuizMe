@@ -1,11 +1,16 @@
 package com.hkr.quizme;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.hkr.quizme.global_data.CurrentUser;
+import com.hkr.quizme.utils.Ranking;
+import com.hkr.quizme.utils.Rankings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +20,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
     private ImageView profilPic;
-    private TextView userName;
+    private TextView userName, levelTxt;
+    private ProgressBar levelBarMain;
     private AppBarConfiguration mAppBarConfiguration;
     private static int backCounter = 0;
 
@@ -31,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
 
         profilPic = findViewById(R.id.profileImageMain);
         userName = findViewById(R.id.userNameMain);
+        levelTxt = findViewById(R.id.levelTxt);
+        levelBarMain = findViewById(R.id.levelBarMain);
 
         if (getIntent().getStringExtra("fb") != null) {
-
             //The user logged in with Fb
             //TODO: Save the info into data base
             String firstName = getIntent().getStringExtra("firstName");
@@ -44,8 +53,13 @@ public class MainActivity extends AppCompatActivity {
 
             Glide.with(this).load(imageURL).into(profilPic);
             userName.setText(firstName + " " + lastName);
+        } else if (CurrentUser.getInstance().getUser() != null) {
+            userName.setText(CurrentUser.getInstance().getUser().getDisplayName());
+            Rankings rankings = new Rankings();
+            levelTxt.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
+            levelBarMain.setProgress(rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
+            System.out.println("RANKING:" + rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
         }
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

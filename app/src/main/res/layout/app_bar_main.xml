@@ -49,14 +49,14 @@
                     android:textSize="25dp"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.75"
-                    app:layout_constraintBottom_toTopOf="@+id/rankMain"
+                    app:layout_constraintBottom_toTopOf="@+id/levelTxt"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/profileImageMain"
                     app:layout_constraintVertical_bias="0.2" />
 
                 <TextView
-                    android:id="@+id/rankMain"
+                    android:id="@+id/levelTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
@@ -75,6 +75,7 @@
                     android:layout_width="220dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="48dp"
+                    android:max="100"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.75"
                     app:layout_constraintBottom_toBottomOf="parent"

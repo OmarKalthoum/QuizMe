@@ -18,12 +18,13 @@ public class User {
     private String displayName;
     private String email;
     private String hash;
+    private int points;
 
-    public User(int id, String displayName, String email) {
+    public User(int id, String displayName, String email, int points) {
         this.id = id;
         this.displayName = displayName;
         this.email = email;
-        this.hash = hash;
+        this.points = points;
     }
 
     public User(String displayName, String email) {
@@ -58,6 +59,14 @@ public class User {
 
     public String getHash() {
         return hash;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public boolean register() {
@@ -143,7 +152,7 @@ public class User {
             if (result!=null) {
                 if (result.getBoolean("success")) {
                     Log.d("User::", result.toString());
-                    return new User(result.getInt("id"), result.getString("displayName"), result.getString("email"));
+                    return new User(result.getInt("id"), result.getString("displayName"), result.getString("email"), result.getInt("points"));
                 } else {
                     Toast.makeText(context, result.getString("message"), Toast.LENGTH_SHORT).show();
                     return null;

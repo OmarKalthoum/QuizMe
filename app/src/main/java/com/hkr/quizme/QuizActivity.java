@@ -6,22 +6,21 @@ import android.content.Intent;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
 import android.view.View;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hkr.quizme.database_utils.entities.Quiz;
+import com.hkr.quizme.global_data.QuizHolder;
+
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button button1, button2, button3, button4;
     private TextView timer, totalQuestions, question;
-    private static int counter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,52 +31,57 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
 
+
         timer = findViewById(R.id.timer);
         totalQuestions = findViewById(R.id.totalQuestions);
         question = findViewById(R.id.question);
+
+        question.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getQuestion());
+        button1.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(0).getAnswer());
+        button2.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(1).getAnswer());
+        button3.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(2).getAnswer());
+        button4.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(3).getAnswer());
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
         button4.setOnClickListener(this);
-
     }
 
     @Override
     public void onClick(View v) {
-        counter++;
-        if (counter > 3) {
-            counter = 0;
+        QuizHolder.getInstance().incrementCurrentQuestion();
+        if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getQuiz().getQuestions().size()) {
+            QuizHolder.getInstance().setCurrentQuestion(0);
             Intent intent = new Intent(this, QuizResultActivity.class);
             startActivity(intent);
         } else {
             TransitionDrawable transition = (TransitionDrawable) v.getBackground();
             transition.startTransition(300);
             if (v == button1) {
-                setTranstionGrey(button2);
-                setTranstionGrey(button3);
-                setTranstionGrey(button4);
-
+                setTransitionGrey(button2);
+                setTransitionGrey(button3);
+                setTransitionGrey(button4);
             }
             if (v == button2) {
-                setTranstionGrey(button1);
-                setTranstionGrey(button3);
-                setTranstionGrey(button4);
+                setTransitionGrey(button1);
+                setTransitionGrey(button3);
+                setTransitionGrey(button4);
             }
             if (v == button3) {
-                setTranstionGrey(button2);
-                setTranstionGrey(button1);
-                setTranstionGrey(button4);
+                setTransitionGrey(button2);
+                setTransitionGrey(button1);
+                setTransitionGrey(button4);
             }
             if (v == button4) {
-                setTranstionGrey(button2);
-                setTranstionGrey(button1);
-                setTranstionGrey(button3);
+                setTransitionGrey(button2);
+                setTransitionGrey(button1);
+                setTransitionGrey(button3);
             }
         }
     }
 
-    public void setTranstionGrey(Button button) {
+    public void setTransitionGrey(Button button) {
         button.setBackground(getDrawable(R.drawable.transition_button_grey));
         TransitionDrawable transition2 = (TransitionDrawable) button.getBackground();
         transition2.startTransition(100);
