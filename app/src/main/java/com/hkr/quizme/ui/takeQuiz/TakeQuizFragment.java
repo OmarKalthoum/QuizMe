@@ -26,7 +26,6 @@ import java.util.concurrent.ExecutionException;
 public class TakeQuizFragment extends Fragment  {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
     private List<Parent> parents;
     private TextView statusTextView;
 

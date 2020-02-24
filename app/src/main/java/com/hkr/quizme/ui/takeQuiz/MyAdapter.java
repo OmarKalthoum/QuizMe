@@ -25,13 +25,13 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
 
     @Override
     public ParentViewHolder onCreateParentViewHolder(ViewGroup viewGroup) {
-        View view = inflater.inflate(R.layout.parent_layout_list,viewGroup,false);
+        View view = inflater.inflate(R.layout.take_quiz_parent_layout_list,viewGroup,false);
         return new ParentViewHolder(view);
     }
 
     @Override
     public ChildViewHolder onCreateChildViewHolder(ViewGroup viewGroup) {
-        View view = inflater.inflate(R.layout.child_layout_list,viewGroup,false);
+        View view = inflater.inflate(R.layout.take_quiz_child_layout_list,viewGroup,false);
         view.setOnClickListener(this);
         return new ChildViewHolder(view);
     }

@@ -26,9 +26,9 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.hkr.quizme.ui.home.HomeFragment"
+        android:name="com.hkr.quizme.ui.previousResult.PrevResultFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_prev-result" />
 
     <fragment
         android:id="@+id/nav_share"

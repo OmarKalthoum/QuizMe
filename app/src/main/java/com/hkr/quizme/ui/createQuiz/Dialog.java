@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
-
 import java.util.LinkedList;
 
 import androidx.annotation.NonNull;

@@ -31,7 +31,7 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
     @NonNull
     @Override
     public CreateQuizHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_card_view, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_quiz_card_view, parent, false);
         editQuestion = v.findViewById(R.id.edit_question_button);
         deleteQuestion = v.findViewById(R.id.delete_question_button);
 
@@ -52,10 +52,8 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
         editQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 v.startAnimation(animation);
                 // TODO::: Start an activity where the user can edit the desired question
-
             }
         });
         deleteQuestion.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +61,6 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
             public void onClick(View v) {
                 v.startAnimation(animation);
                 //TOdO::: delete the marked question
-
 
              /*
                 questions.remove(position);
