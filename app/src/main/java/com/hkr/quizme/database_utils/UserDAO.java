@@ -39,18 +39,46 @@ public class UserDAO implements DAO<User> {
         return false;
     }
 
-    public boolean checkUniqueEmail(User object) {
+    public JSONObject checkUniqueEmail(User object) {
         APICommunicator communicator = new APICommunicator();
         try {
             JSONObject params = new JSONObject();
             params.put("email", object.getEmail());
             JSONObject response = communicator.apiCallForResponse("/email-unique", "POST", params);
             if (response.getBoolean("success")) {
-                return response.getBoolean("unique");
+                return response;
             }
         } catch (JSONException exception) {
             Log.e("JSON::", exception.getMessage());
         }
-        return false;
+        return DAOUtils.generateConnectionError();
+    }
+
+    public JSONObject checkUniqueDisplayName(User object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("displayName", object.getDisplayName());
+            JSONObject response = communicator.apiCallForResponse("/display-name-unique", "POST", params);
+            if (response.getBoolean("success")) {
+                return response;
+            }
+        } catch (JSONException exception) {
+            Log.e("JSON::", exception.getMessage());
+        }
+        return DAOUtils.generateConnectionError();
+    }
+
+    public JSONObject login(User object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("displayName", object.getDisplayName());
+            params.put("hash", object.getHash());
+            return communicator.apiCallForResponse("/login", "POST", params);
+        } catch (JSONException exception) {
+            Log.e("JSON::", exception.getMessage());
+        }
+        return DAOUtils.generateConnectionError();
     }
 }

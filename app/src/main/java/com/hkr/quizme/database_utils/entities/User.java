@@ -1,10 +1,15 @@
 package com.hkr.quizme.database_utils.entities;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hkr.quizme.database_utils.UserDAO;
 import com.hkr.quizme.database_utils.hashing.PasswordHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
 
@@ -24,6 +29,10 @@ public class User {
     public User(String displayName, String email) {
         this.displayName = displayName;
         this.email = email;
+    }
+
+    public User(String displayName) {
+        this.displayName = displayName;
     }
 
     public void hashAndSetPassword(String password) {
@@ -62,14 +71,91 @@ public class User {
 
     public boolean checkUniqueEmail() {
         try {
-            return new CheckUniqueEmailTask().execute(this).get();
-        } catch (InterruptedException | ExecutionException exception) {
+            JSONObject result = new CheckUniqueEmailTask().execute(this).get();
+            if (result != null && result.getBoolean("success")) {
+                return true;
+            }
+            return false;
+        } catch (InterruptedException | ExecutionException | JSONException exception) {
             Log.e("User:::", exception.getMessage());
             return false;
         }
     }
 
-    private class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
+    public boolean checkUniqueEmail(Context context) {
+        try {
+            JSONObject result = new CheckUniqueEmailTask().execute(this).get();
+            if (result != null) {
+                if (result.getBoolean("success") && result.getBoolean("unique")) {
+                    return true;
+                } else if (result.getBoolean("success")) {
+                    Toast.makeText(context, "A user with that email already exists.", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    Toast.makeText(context, result.getString("message"), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            return false;
+        } catch (InterruptedException | ExecutionException | JSONException exception) {
+            Log.e("User:::", exception.toString());
+            return false;
+        }
+    }
+
+    public boolean checkUniqueDisplayName() {
+        try {
+            JSONObject result = new CheckUniqueDisplayNameTask().execute(this).get();
+            if (result != null && result.getBoolean("success")) {
+                return true;
+            }
+            return false;
+        } catch (InterruptedException | ExecutionException | JSONException exception) {
+            Log.e("User:::", exception.getMessage());
+            return false;
+        }
+    }
+
+    public boolean checkUniqueDisplayName(Context context) {
+        try {
+            JSONObject result = new CheckUniqueDisplayNameTask().execute(this).get();
+            if (result != null) {
+                if (result.getBoolean("success") && result.getBoolean("unique")) {
+                    return true;
+                } else if (result.getBoolean("success")) {
+                    Toast.makeText(context, "A user with that display name already exists.", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    Toast.makeText(context, "b" + result.getString("message"), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+            return false;
+        } catch (InterruptedException | ExecutionException | JSONException exception) {
+            Log.e("User:::", exception.toString());
+            return false;
+        }
+    }
+
+    public User login(Context context) {
+        try {
+            JSONObject result = new LoginUserTask().execute(this).get();
+            if (result!=null) {
+                if (result.getBoolean("success")) {
+                    Log.d("User::", result.toString());
+                    return new User(result.getInt("id"), result.getString("displayName"), result.getString("email"));
+                } else {
+                    Toast.makeText(context, result.getString("message"), Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+            }
+        } catch (InterruptedException | ExecutionException | JSONException exception) {
+            Log.e("User:::", exception.toString());
+        }
+        return null;
+    }
+
+    private static class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
         @Override
         protected Boolean doInBackground(User... users) {
             UserDAO dao = new UserDAO();
@@ -77,11 +163,27 @@ public class User {
         }
     }
 
-    private class CheckUniqueEmailTask extends AsyncTask<User, Void, Boolean> {
+    private static class LoginUserTask extends AsyncTask<User, Void, JSONObject> {
         @Override
-        protected Boolean doInBackground(User... users) {
+        protected JSONObject doInBackground(User... users) {
+            UserDAO dao = new UserDAO();
+            return dao.login(users[0]);
+        }
+    }
+
+    private static class CheckUniqueEmailTask extends AsyncTask<User, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(User... users) {
             UserDAO dao = new UserDAO();
             return dao.checkUniqueEmail(users[0]);
+        }
+    }
+
+    private static class CheckUniqueDisplayNameTask extends AsyncTask<User, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(User... users) {
+            UserDAO dao = new UserDAO();
+            return dao.checkUniqueDisplayName(users[0]);
         }
     }
 }

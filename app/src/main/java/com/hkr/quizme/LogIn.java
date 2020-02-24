@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.facebook.AccessToken;
@@ -25,6 +24,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.hkr.quizme.database_utils.entities.User;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Log_In extends AppCompatActivity implements View.OnClickListener {
+public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     private EditText userNameInput, passwordInput;
     private Button logInBtn;
@@ -74,15 +74,19 @@ public class Log_In extends AppCompatActivity implements View.OnClickListener {
         if (v == logInBtn) {
             v.startAnimation(animation);
             // TODO: If the user press the log in button
-
-            //test
+            User user = new User(userNameInput.getText().toString());
+            user.hashAndSetPassword(passwordInput.getText().toString());
+            user = user.login(this);
+            if (user == null) {
+                return;
+            }
             Intent f = new Intent(this, MainActivity.class);
             startActivity(f);
         }
         if (v == signUpBtn) {
 
             v.startAnimation(animation);
-            Intent singUpIntent = new Intent(Log_In.this, SignUp.class);
+            Intent singUpIntent = new Intent(LogIn.this, SignUp.class);
             startActivity(singUpIntent);
         }
 
