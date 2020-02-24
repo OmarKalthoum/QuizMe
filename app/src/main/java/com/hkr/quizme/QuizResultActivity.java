@@ -70,8 +70,8 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         final TextView feedBackName = feedBackDialog.findViewById(R.id.feedback_name);
         final TextView feedbackEmail = feedBackDialog.findViewById(R.id.feedback_email);
         final TextView feedbackContent = feedBackDialog.findViewById(R.id.feedback_content);
-        final Button submitBtn = feedBackDialog.findViewById(R.id.submitReportBtn);
-        final Button cancelBtn = feedBackDialog.findViewById(R.id.cancelReportBtn);
+        final Button submitBtn = feedBackDialog.findViewById(R.id.ok_button);
+        final Button cancelBtn = feedBackDialog.findViewById(R.id.cancel_button);
 
         feedBackDialog.setCancelable(false);
 

@@ -78,7 +78,7 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         //TODO: Bring all the created questions by the user and add them to the question linkedlist
         for (int i = 1; i < 10; i++) {
             questions.add(new Question(i + ": The time factor when determining the efficiency of algorithm is measured by",
-                    "Counting the number of key operations", "------------------",
+                    "Counting the number of key operations", "",
                     "Counting microseconds", "Counting the number of statements",
                     "Counting the kilobytes of algorithm", "Counting the kilobytes of algorithm"));
         }

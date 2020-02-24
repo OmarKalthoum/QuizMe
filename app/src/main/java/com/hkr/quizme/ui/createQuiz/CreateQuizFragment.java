@@ -43,7 +43,7 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         addCorrectAnswer = root.findViewById(R.id.add_correct_answer);
         addWrongAnswer = root.findViewById(R.id.add_wrong_answer);
         finishCreating = root.findViewById(R.id.finish_create_quiz);
-        nextQuestion = root.findViewById(R.id.next_question);
+        nextQuestion = root.findViewById(R.id.done);
         addCorrectAnswerText = root.findViewById(R.id.add_correct_answer_text);
         addWrongAnswerText = root.findViewById(R.id.add_wrong_answer_text);
         correctAnswerTwo = root.findViewById(R.id.correct_answer_two);

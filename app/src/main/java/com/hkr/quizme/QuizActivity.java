@@ -1,17 +1,18 @@
 package com.hkr.quizme;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.InputType;
 import android.view.View;
-import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -96,22 +97,37 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(this));
-        builder.setTitle("Warning");
-        builder.setMessage("Are you sure you want to exit the quiz?");
-        builder.setIcon(getDrawable(R.drawable.warning));
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+      warningDialog();
+    }
+
+    public void warningDialog(){
+        final Dialog warningDialog = new Dialog(this);
+        warningDialog.setContentView(R.layout.warning_alert_dialog);
+        warningDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        final Button okBtn = warningDialog.findViewById(R.id.ok_button);
+        final Button cancelBtn = warningDialog.findViewById(R.id.cancel_button);
+        final TextView title = warningDialog.findViewById(R.id.title_dialog);
+        title.setText("Are you sure you want to exit the quiz?");
+
+        warningDialog.setCancelable(false);
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO: IF the user chose to exit the quiz before finishing it
+            public void onClick(View v) {
+                warningDialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+        okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onClick(View v) {
+                //TODO:::: exit the quiz without saving any info
+                Toast.makeText(getBaseContext(), "Your result will not be saved", Toast.LENGTH_LONG).show();
+                warningDialog.dismiss();
             }
         });
-        builder.show();
+
+        warningDialog.show();
     }
 }

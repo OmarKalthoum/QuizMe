@@ -1,6 +1,8 @@
 package com.hkr.quizme.ui.createQuiz;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
+import com.hkr.quizme.EditQuestion;
 import com.hkr.quizme.R;
 
 import java.util.LinkedList;
@@ -17,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
     private Context context;
-    private LinkedList<Question> questions;
+    public static LinkedList<Question> questions;
     private Button editQuestion, deleteQuestion;
     private Animation animation;
 
@@ -53,6 +56,20 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
             @Override
             public void onClick(View v) {
                 v.startAnimation(animation);
+                Intent intent = new Intent(context, EditQuestion.class);
+                intent.putExtra("question", questions.get(position).getQuestion());
+                intent.putExtra("correctAnswerOne", questions.get(position).getCorrectAnswerOne());
+                intent.putExtra("wrongAnswerOne", questions.get(position).getWrongAnswerOne());
+                intent.putExtra("wrongAnswerTwo", questions.get(position).getWrongAnswerTwo());
+                intent.putExtra("wrongAnswerThree", questions.get(position).getWrongAnswerThree());
+                intent.putExtra("correctAnswerTwo", questions.get(position).getCorrectAnswerTwo());
+                intent.putExtra("wrongAnswerFour", questions.get(position).getWrongAnswerFour());
+                String pos = String.valueOf(position);
+                intent.putExtra("position", pos);
+                Log.d("OMAR:", String.valueOf(pos));
+
+                context.startActivity(intent);
+
                 // TODO::: Start an activity where the user can edit the desired question
             }
         });
