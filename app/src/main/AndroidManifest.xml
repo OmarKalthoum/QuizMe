@@ -14,7 +14,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".EditQuestion"></activity>
-        <activity android:name=".EditQuestion" />
         <activity
             android:name=".QuizResultActivity"
             android:screenOrientation="portrait" />
