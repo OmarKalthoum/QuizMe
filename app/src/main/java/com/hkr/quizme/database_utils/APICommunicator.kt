@@ -8,6 +8,7 @@ import java.io.InputStreamReader
 import java.lang.StringBuilder
 import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 
 class APICommunicator {
@@ -19,14 +20,16 @@ class APICommunicator {
     fun apiCallForResponse(apiPath: String, method: String, params: JSONObject): JSONObject {
         val apiURL = URL(BASE_URL + apiPath)
         val connection = apiURL.openConnection() as HttpURLConnection
-        connection.requestMethod = method
-        connection.setRequestProperty("Content-Type", "application/json")
-        connection.setRequestProperty("Accept", "application/json")
-        connection.doOutput = true
-        connection.doInput = true
-
-        Log.d("NETWORK:::", "Sending request...")
         try {
+            connection.requestMethod = method
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("Accept", "application/json")
+            connection.doOutput = true
+            connection.doInput = true
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+
+            Log.d("NETWORK:::", "Sending request...")
             val outputStream = DataOutputStream(connection.outputStream)
             outputStream.use {
                 params.put("key", API_KEY)
@@ -49,18 +52,22 @@ class APICommunicator {
                 connection.disconnect()
                 return JSONObject(rawResponse.toString())
             }
-            connection.disconnect()
             Log.d("NETWORK::::", BASE_URL + apiPath)
             return JSONObject(
-                String.format(
-                    "{\"success\": false,\"message\": \"%s\"}",
-                    connection.responseMessage
-                )
+                    String.format(
+                            "{\"success\": false,\"message\": \"%s\"}",
+                            connection.responseMessage
+                    )
             )
         } catch (ex: ConnectException) {
             Log.d("DB::::::", ex.toString())
             return JSONObject(
-                "{\"success\": false,\"message\": \"Could not connect to server.\"}"
+                    "{\"success\": false,\"message\": \"Could not connect to server.\"}"
+            )
+        } catch (ex: SocketTimeoutException) {
+            Log.d("DB::::::", ex.toString())
+            return JSONObject(
+                    "{\"success\": false,\"message\": \"Could not connect to server.\"}"
             )
         }
     }
