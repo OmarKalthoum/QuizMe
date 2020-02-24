@@ -10,6 +10,7 @@ import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.hkr.quizme.QuizActivity;
 import com.hkr.quizme.R;
+import com.hkr.quizme.global_data.QuizHolder;
 
 import java.util.List;
 
@@ -53,8 +54,8 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
     @Override
     public void onClick(View v) {
         // TODO : START NEW ACTIVITY
+        QuizHolder.getInstance().initialize(1);
         Intent intent = new Intent(v.getContext(), QuizActivity.class);
-      v.getContext().startActivity(intent);
-       // Toast.makeText(v.getContext(), "Hej",Toast.LENGTH_LONG).show();
+        v.getContext().startActivity(intent);
     }
 }

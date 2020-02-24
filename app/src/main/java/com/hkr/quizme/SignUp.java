@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,14 +14,12 @@ import android.widget.Toast;
 
 import com.hkr.quizme.database_utils.entities.User;
 
-import static com.hkr.quizme.Log_In.playQuizMeSound;
+import static com.hkr.quizme.LogIn.playQuizMeSound;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener{
-
     private EditText userName, email, password,confirmPassword;
     private Button signUoBtn;
     private ImageView userNameIcon, emailIcon, passwordIcon, confirmPasswordIcon, addProfilePic, logoBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +40,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         passwordIcon = findViewById(R.id.passwordIcon);
         confirmPasswordIcon = findViewById(R.id.confirmPasswordIcon);
 
-
         signUoBtn.setOnClickListener(this);
         logoBtn.setOnClickListener(this);
         addProfilePic.setOnClickListener(this);
-
     }
 
     @Override
@@ -56,19 +51,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
 
         if(v == signUoBtn){
             v.startAnimation(animation);
-            // TODO: save input information and check with DB, then go to log in activity
             User user = new User(userName.getText().toString(), email.getText().toString());
             user.hashAndSetPassword(password.getText().toString());
-            if (!user.checkUniqueEmail()) {
-                Toast.makeText(this, "Email not unique.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (user.register()) {
+            if (user.checkUniqueDisplayName(this) && user.checkUniqueEmail(this)  && user.register()) {
                 Toast.makeText(this, "Registration was successful!", Toast.LENGTH_LONG).show();
-                Intent logInIntent = new Intent(this, Log_In.class);
+                Intent logInIntent = new Intent(this, LogIn.class);
                 startActivity(logInIntent);
-            } else {
-                Toast.makeText(this, "That email is already in use.", Toast.LENGTH_LONG).show();
             }
         }
         if(v == addProfilePic){

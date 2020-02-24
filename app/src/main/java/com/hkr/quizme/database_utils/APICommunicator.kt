@@ -4,6 +4,7 @@ import android.util.Log
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.DataOutputStream
+import java.io.IOException
 import java.io.InputStreamReader
 import java.lang.StringBuilder
 import java.net.ConnectException
@@ -65,6 +66,11 @@ class APICommunicator {
                     "{\"success\": false,\"message\": \"Could not connect to server.\"}"
             )
         } catch (ex: SocketTimeoutException) {
+            Log.d("DB::::::", ex.toString())
+            return JSONObject(
+                    "{\"success\": false,\"message\": \"Could not connect to server.\"}"
+            )
+        } catch (ex: IOException) {
             Log.d("DB::::::", ex.toString())
             return JSONObject(
                     "{\"success\": false,\"message\": \"Could not connect to server.\"}"
