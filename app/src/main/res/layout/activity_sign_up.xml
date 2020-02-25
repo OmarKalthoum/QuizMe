@@ -13,7 +13,7 @@
         android:layout_width="170dp"
         android:layout_height="164dp"
 
-        app:layout_constraintBottom_toTopOf="@+id/userNameInput"
+        app:layout_constraintBottom_toTopOf="@+id/email_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,17 +22,32 @@
         app:srcCompat="@drawable/add_profile_image" />
 
     <EditText
-        android:id="@+id/userNameInput"
+        android:id="@+id/email_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:backgroundTint="#ffffff"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName"
         android:textColor="#FFFFFFFF"
         android:textColorHint="#4E4C4C"
-        android:ems="10"
-        android:hint="User Name"
-        android:inputType="textPersonName"
 
+        app:layout_constraintBottom_toTopOf="@+id/lastNameInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/lastNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:backgroundTint="#ffffff"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFFFF"
+        android:textColorHint="#4E4C4C"
         app:layout_constraintBottom_toTopOf="@+id/emailInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -110,73 +125,5 @@
         app:layout_constraintVertical_bias="0.957"
         app:srcCompat="@drawable/logo" />
 
-
-    <ImageView
-        android:id="@+id/userNameIcon"
-        android:layout_width="45dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/userNameInput"
-        app:layout_constraintEnd_toStartOf="@+id/userNameInput"
-        app:layout_constraintHorizontal_bias="0.815"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/userNameInput"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_check_circle_black_24dp"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/emailIcon"
-        android:layout_width="45dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/emailInput"
-        app:layout_constraintEnd_toStartOf="@+id/emailInput"
-        app:layout_constraintHorizontal_bias="0.815"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/emailInput"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_check_circle_black_24dp"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/passwordIcon"
-        android:layout_width="45dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/passwordInput"
-        app:layout_constraintEnd_toStartOf="@+id/passwordInput"
-        app:layout_constraintHorizontal_bias="0.815"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/passwordInput"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_check_circle_black_24dp"
-        tools:ignore="MissingConstraints" />
-
-    <ImageView
-        android:id="@+id/confirmPasswordIcon"
-        android:layout_width="45dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/confirmPasswordInput"
-        app:layout_constraintEnd_toStartOf="@+id/confirmPasswordInput"
-        app:layout_constraintHorizontal_bias="0.815"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/confirmPasswordInput"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_check_circle_red_24dp"
-        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
