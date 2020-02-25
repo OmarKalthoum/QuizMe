@@ -22,10 +22,11 @@ public class UserDAO implements DAO<User> {
     public boolean insert(User object) {
         APICommunicator communicator = new APICommunicator();
         JSONObject params = new JSONObject();
-        JSONObject response = null;
+        JSONObject response;
         try {
             params.put("email", object.getEmail());
-            params.put("displayName", object.getDisplayName());
+            params.put("firstName", object.getFirstName());
+            params.put("lastName", object.getLastName());
             params.put("hash", object.getHash());
             response = communicator.apiCallForResponse("/register", "POST", params);
             boolean success = response.getBoolean("success");
@@ -37,6 +38,34 @@ public class UserDAO implements DAO<User> {
             Log.e("UserDAO::", exception.getMessage());
         }
         return false;
+    }
+
+    public boolean insertFacebookUser(User object) {
+        APICommunicator communicator = new APICommunicator();
+        JSONObject params = new JSONObject();
+        JSONObject response;
+        try {
+            params.put("email", object.getEmail());
+            params.put("firstName", object.getFirstName());
+            params.put("lastName", object.getLastName());
+            response = communicator.apiCallForResponse("/register-fb", "POST", params);
+            return response.getBoolean("success");
+        } catch (JSONException exception) {
+            Log.e("UserDAO::", exception.getMessage());
+            return false;
+        }
+    }
+
+    public JSONObject findUser(User object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("email", object.getEmail());
+            return communicator.apiCallForResponse("/find-user", "POST", params);
+        } catch (JSONException exception) {
+            Log.e("JSON::", exception.getMessage());
+        }
+        return null;
     }
 
     public JSONObject checkUniqueEmail(User object) {
@@ -54,26 +83,11 @@ public class UserDAO implements DAO<User> {
         return DAOUtils.generateConnectionError();
     }
 
-    public JSONObject checkUniqueDisplayName(User object) {
-        APICommunicator communicator = new APICommunicator();
-        try {
-            JSONObject params = new JSONObject();
-            params.put("displayName", object.getDisplayName());
-            JSONObject response = communicator.apiCallForResponse("/display-name-unique", "POST", params);
-            if (response.getBoolean("success")) {
-                return response;
-            }
-        } catch (JSONException exception) {
-            Log.e("JSON::", exception.getMessage());
-        }
-        return DAOUtils.generateConnectionError();
-    }
-
     public JSONObject login(User object) {
         APICommunicator communicator = new APICommunicator();
         try {
             JSONObject params = new JSONObject();
-            params.put("displayName", object.getDisplayName());
+            params.put("email", object.getEmail());
             params.put("hash", object.getHash());
             return communicator.apiCallForResponse("/login", "POST", params);
         } catch (JSONException exception) {
