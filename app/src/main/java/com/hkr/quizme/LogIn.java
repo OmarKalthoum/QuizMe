@@ -162,9 +162,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                     mainIntent.putExtra("email", email);
                     mainIntent.putExtra("id", id);
                     mainIntent.putExtra("profileImage", profileImage);
-                    System.out.println(firstName);
                     startActivity(mainIntent);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

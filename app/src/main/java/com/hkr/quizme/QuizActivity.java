@@ -35,7 +35,6 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
 
-
         timer = findViewById(R.id.timer);
         totalQuestions = findViewById(R.id.totalQuestions);
         question = findViewById(R.id.question);
