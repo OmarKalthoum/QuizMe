@@ -41,7 +41,7 @@ public class TakeQuizFragment extends Fragment  {
         takeQuizViewModel = ViewModelProviders.of(this).get(TakeQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_take_quiz, container, false);
         statusTextView = root.findViewById(R.id.text_status);
-        recyclerView = root.findViewById(R.id.RecyclerView);
+        recyclerView = root.findViewById(R.id.recycleview_choose_quiz);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MyAdapter adapter = new MyAdapter(getContext(), initData());
         // TODO: FETCH SUBCATEGORIES FROM DB

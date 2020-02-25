@@ -48,7 +48,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         if (v == signUoBtn) {
             v.startAnimation(animation);
-            User user = new User(userName.getText().toString(), email.getText().toString());
+            User user = new User(firstName.getText().toString(), email.getText().toString());
             user.hashAndSetPassword(password.getText().toString());
             if (user.checkUniqueDisplayName(this) && user.checkUniqueEmail(this) && user.register()) {
                 Toast.makeText(this, "Registration was successful!", Toast.LENGTH_LONG).show();

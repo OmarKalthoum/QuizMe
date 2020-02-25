@@ -28,13 +28,18 @@
         android:id="@+id/nav_home"
         android:name="com.hkr.quizme.ui.previousResult.PrevResultFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_prev-result" />
+        tools:layout="@layout/fragment_prev_result" />
 
     <fragment
         android:id="@+id/nav_share"
         android:name="com.hkr.quizme.ui.aboutUs.AboutUsFragment"
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_about_us" />
+    <fragment
+        android:id="@+id/choose_quiz"
+        android:name="com.hkr.quizme.ui.chooseQuiz.ChooseQuizFragment"
+        android:label="Choose Quiz"
+        tools:layout="@layout/fragment_choose_quiz" />
 
 
 </navigation>
