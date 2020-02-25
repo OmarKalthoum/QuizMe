@@ -26,7 +26,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        firstName = findViewById(R.id.email_input);
+        firstName = findViewById(R.id.firstNameInput);
         lastName = findViewById(R.id.lastNameInput);
         email = findViewById(R.id.emailInput);
         password = findViewById(R.id.passwordInput);
@@ -45,12 +45,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
-
         if (v == signUoBtn) {
             v.startAnimation(animation);
-            User user = new User(userName.getText().toString(), email.getText().toString());
+            User user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString());
             user.hashAndSetPassword(password.getText().toString());
-            if (user.checkUniqueDisplayName(this) && user.checkUniqueEmail(this) && user.register()) {
+            if (user.checkUniqueEmail(this) && user.register()) {
                 Toast.makeText(this, "Registration was successful!", Toast.LENGTH_LONG).show();
                 Intent logInIntent = new Intent(this, LogIn.class);
                 startActivity(logInIntent);

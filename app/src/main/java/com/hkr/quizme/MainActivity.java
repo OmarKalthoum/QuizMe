@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.hkr.quizme.global_data.CurrentUser;
-import com.hkr.quizme.utils.Ranking;
 import com.hkr.quizme.utils.Rankings;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +18,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView profilPic;
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(this).load(imageURL).into(profilPic);
             userName.setText(firstName + " " + lastName);
         } else if (CurrentUser.getInstance().getUser() != null) {
-            userName.setText(CurrentUser.getInstance().getUser().getDisplayName());
+            userName.setText(CurrentUser.getInstance().getUser().getFirstName());
             Rankings rankings = new Rankings();
             levelTxt.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
             levelBarMain.setProgress(rankings.getProgressPercent(CurrentUser.getInstance().getUser()));

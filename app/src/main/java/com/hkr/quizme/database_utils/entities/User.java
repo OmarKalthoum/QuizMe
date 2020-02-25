@@ -15,25 +15,28 @@ import java.util.concurrent.ExecutionException;
 
 public class User {
     private int id;
-    private String displayName;
+    private String firstName;
+    private String lastName;
     private String email;
     private String hash;
     private int points;
 
-    public User(int id, String displayName, String email, int points) {
+    public User(int id, String firstName, String lastName, String email, int points) {
         this.id = id;
-        this.displayName = displayName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.points = points;
     }
 
-    public User(String displayName, String email) {
-        this.displayName = displayName;
+    public User(String firstName, String lastName, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
     }
 
-    public User(String displayName) {
-        this.displayName = displayName;
+    public User(String email) {
+        this.email = email;
     }
 
     public void hashAndSetPassword(String password) {
@@ -41,12 +44,20 @@ public class User {
         this.hash = handler.hash(password);
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -72,6 +83,15 @@ public class User {
     public boolean register() {
         try {
             return new RegisterUserTask().execute(this).get();
+        } catch (InterruptedException | ExecutionException exception) {
+            Log.e("User:::", exception.getMessage());
+            return false;
+        }
+    }
+
+    public boolean registerFacebook() {
+        try {
+            return new RegisterFacebookUserTask().execute(this).get();
         } catch (InterruptedException | ExecutionException exception) {
             Log.e("User:::", exception.getMessage());
             return false;
@@ -112,47 +132,13 @@ public class User {
         }
     }
 
-    public boolean checkUniqueDisplayName() {
-        try {
-            JSONObject result = new CheckUniqueDisplayNameTask().execute(this).get();
-            if (result != null && result.getBoolean("success")) {
-                return true;
-            }
-            return false;
-        } catch (InterruptedException | ExecutionException | JSONException exception) {
-            Log.e("User:::", exception.getMessage());
-            return false;
-        }
-    }
-
-    public boolean checkUniqueDisplayName(Context context) {
-        try {
-            JSONObject result = new CheckUniqueDisplayNameTask().execute(this).get();
-            if (result != null) {
-                if (result.getBoolean("success") && result.getBoolean("unique")) {
-                    return true;
-                } else if (result.getBoolean("success")) {
-                    Toast.makeText(context, "A user with that display name already exists.", Toast.LENGTH_SHORT).show();
-                    return false;
-                } else {
-                    Toast.makeText(context, "b" + result.getString("message"), Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            }
-            return false;
-        } catch (InterruptedException | ExecutionException | JSONException exception) {
-            Log.e("User:::", exception.toString());
-            return false;
-        }
-    }
-
     public User login(Context context) {
         try {
             JSONObject result = new LoginUserTask().execute(this).get();
             if (result != null) {
                 if (result.getBoolean("success")) {
                     Log.d("User::", result.toString());
-                    return new User(result.getInt("id"), result.getString("displayName"), result.getString("email"), result.getInt("points"));
+                    return new User(result.getInt("id"), result.getString("firstName"), result.getString("lastName"), result.getString("email"), result.getInt("points"));
                 } else {
                     Toast.makeText(context, result.getString("message"), Toast.LENGTH_SHORT).show();
                     return null;
@@ -164,11 +150,39 @@ public class User {
         return null;
     }
 
+    public User findUser(Context context) {
+        try {
+            JSONObject result = new FindUserTask().execute(this).get();
+            if (result != null) {
+                if (result.getBoolean("success")) {
+                    if (result.getBoolean("exists")) {
+                        JSONObject userJSON = result.getJSONObject("user");
+                        return new User(userJSON.getInt("id"), userJSON.getString("firstName"), userJSON.getString("lastName"), userJSON.getString("email"), userJSON.getInt("points"));
+                    }
+                } else {
+                    Toast.makeText(context, result.getString("message"), Toast.LENGTH_SHORT).show();
+                    return null;
+                }
+            }
+        } catch (ExecutionException | InterruptedException | JSONException exception) {
+            Log.e("User:::", exception.toString());
+        }
+        return null;
+    }
+
     private static class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
         @Override
         protected Boolean doInBackground(User... users) {
             UserDAO dao = new UserDAO();
             return dao.insert(users[0]);
+        }
+    }
+
+    private static class RegisterFacebookUserTask extends AsyncTask<User, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(User... users) {
+            UserDAO dao = new UserDAO();
+            return dao.insertFacebookUser(users[0]);
         }
     }
 
@@ -188,11 +202,11 @@ public class User {
         }
     }
 
-    private static class CheckUniqueDisplayNameTask extends AsyncTask<User, Void, JSONObject> {
+    private static class FindUserTask extends AsyncTask<User, Void, JSONObject> {
         @Override
         protected JSONObject doInBackground(User... users) {
             UserDAO dao = new UserDAO();
-            return dao.checkUniqueDisplayName(users[0]);
+            return dao.findUser(users[0]);
         }
     }
 }

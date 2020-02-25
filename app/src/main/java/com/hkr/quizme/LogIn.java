@@ -39,14 +39,12 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     //freddie_xibtgzr_mercury@tfbnw.net
     //test_konto
 
-    private EditText userNameInput, passwordInput;
+    private EditText emailInput, passwordInput;
     private Button logInBtn;
     private TextView signUpBtn;
     private ImageView logoBtn;
     private LoginButton logInWithFB;
     private CallbackManager callbackManager;
-    private String firstName, lastName, id, email, profileImage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +53,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         LoginManager.getInstance().logOut();
 
         //Initialize the views
-        userNameInput = findViewById(R.id.email_input);
+        emailInput = findViewById(R.id.emailInput);
         passwordInput = findViewById(R.id.passwordInput);
         logInBtn = findViewById(R.id.signInBtn);
         signUpBtn = findViewById(R.id.signUpText);
@@ -64,7 +62,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
         callbackManager = CallbackManager.Factory.create();
         logInWithFB.setReadPermissions("email", "public_profile");
-
 
         logoBtn.setOnClickListener(this);
         logInBtn.setOnClickListener(this);
@@ -79,7 +76,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         if (v == logInBtn) {
             v.startAnimation(animation);
             // TODO: If the user press the log in button
-            User user = new User(userNameInput.getText().toString());
+            User user = new User(emailInput.getText().toString());
             user.hashAndSetPassword(passwordInput.getText().toString());
             user = user.login(this);
             if (user == null) {
@@ -153,20 +150,18 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
             public void onCompleted(JSONObject object, GraphResponse response) {
 
                 try {
-                    firstName = object.getString("first_name");
-                    lastName = object.getString("last_name");
-                    email = object.getString("email");
-                    id = object.getString("id");
-                    profileImage = "https://graph.facebook.com/" + id + "/picture?type=large&redirect=true&width=600&height=600";
-
+                    User user = new User(object.getString("first_name"), object.getString("last_name"), object.getString("email"));
+                    User foundUser = user.findUser(emailInput.getContext());
+                    if (foundUser != null) {
+                        user = foundUser;
+                        CurrentUser.getInstance().setUser(user);
+                    } else {
+                        user.registerFacebook();
+                        CurrentUser.getInstance().setUser(user.findUser(emailInput.getContext()));
+                    }
                     Intent mainIntent = new Intent(logInBtn.getContext(), MainActivity.class);
-                    mainIntent.putExtra("fb", "yes");
-                    mainIntent.putExtra("firstName", firstName);
-                    mainIntent.putExtra("lastName", lastName);
-                    mainIntent.putExtra("email", email);
-                    mainIntent.putExtra("id", id);
-                    mainIntent.putExtra("profileImage", profileImage);
                     startActivity(mainIntent);
+                    //profileImage = "https://graph.facebook.com/" + id + "/picture?type=large&redirect=true&width=600&height=600";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
