@@ -1,8 +1,6 @@
 package com.hkr.quizme;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,12 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Objects;
+import com.hkr.quizme.global_data.QuizHolder;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.hkr.quizme.database_utils.entities.Quiz;
-import com.hkr.quizme.global_data.QuizHolder;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -103,10 +98,10 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-      warningDialog();
+        warningDialog();
     }
 
-    public void warningDialog(){
+    public void warningDialog() {
         final Dialog warningDialog = new Dialog(this);
         warningDialog.setContentView(R.layout.warning_alert_dialog);
         warningDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -124,12 +119,13 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 warningDialog.dismiss();
             }
         });
-
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO:::: exit the quiz without saving any info
                 Toast.makeText(getBaseContext(), "Your result will not be saved", Toast.LENGTH_LONG).show();
+                Intent f = new Intent(getBaseContext(), MainActivity.class);
+                startActivity(f);
                 warningDialog.dismiss();
             }
         });

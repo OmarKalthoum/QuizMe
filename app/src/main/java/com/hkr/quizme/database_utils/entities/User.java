@@ -149,7 +149,7 @@ public class User {
     public User login(Context context) {
         try {
             JSONObject result = new LoginUserTask().execute(this).get();
-            if (result!=null) {
+            if (result != null) {
                 if (result.getBoolean("success")) {
                     Log.d("User::", result.toString());
                     return new User(result.getInt("id"), result.getString("displayName"), result.getString("email"), result.getInt("points"));

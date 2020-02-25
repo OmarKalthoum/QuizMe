@@ -16,17 +16,18 @@ import com.hkr.quizme.database_utils.entities.User;
 
 import static com.hkr.quizme.LogIn.playQuizMeSound;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener{
-    private EditText userName, email, password,confirmPassword;
+public class SignUp extends AppCompatActivity implements View.OnClickListener {
+    private EditText firstName, lastName, email, password, confirmPassword;
     private Button signUoBtn;
-    private ImageView userNameIcon, emailIcon, passwordIcon, confirmPasswordIcon, addProfilePic, logoBtn;
+    private ImageView addProfilePic, logoBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        userName = findViewById(R.id.userNameInput);
+        firstName = findViewById(R.id.email_input);
+        lastName = findViewById(R.id.lastNameInput);
         email = findViewById(R.id.emailInput);
         password = findViewById(R.id.passwordInput);
         confirmPassword = findViewById(R.id.confirmPasswordInput);
@@ -35,10 +36,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
         addProfilePic = findViewById(R.id.addProfileImage);
         logoBtn = findViewById(R.id.logo_image_sign_up);
 
-        userNameIcon = findViewById(R.id.userNameIcon);
-        emailIcon = findViewById(R.id.emailIcon);
-        passwordIcon = findViewById(R.id.passwordIcon);
-        confirmPasswordIcon = findViewById(R.id.confirmPasswordIcon);
 
         signUoBtn.setOnClickListener(this);
         logoBtn.setOnClickListener(this);
@@ -49,21 +46,21 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
 
-        if(v == signUoBtn){
+        if (v == signUoBtn) {
             v.startAnimation(animation);
             User user = new User(userName.getText().toString(), email.getText().toString());
             user.hashAndSetPassword(password.getText().toString());
-            if (user.checkUniqueDisplayName(this) && user.checkUniqueEmail(this)  && user.register()) {
+            if (user.checkUniqueDisplayName(this) && user.checkUniqueEmail(this) && user.register()) {
                 Toast.makeText(this, "Registration was successful!", Toast.LENGTH_LONG).show();
                 Intent logInIntent = new Intent(this, LogIn.class);
                 startActivity(logInIntent);
             }
         }
-        if(v == addProfilePic){
+        if (v == addProfilePic) {
             // TODO: Open the gallery and add a pic
 
         }
-        if (v == logoBtn ) {
+        if (v == logoBtn) {
             //Shake the logo
             Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.shakeanimation);
             v.startAnimation(animation2);

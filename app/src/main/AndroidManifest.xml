@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EditQuestion"></activity>
+        <activity android:name=".Main2Activity"></activity>
+        <activity
+            android:name=".EditQuestion"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QuizResultActivity"
             android:screenOrientation="portrait" />

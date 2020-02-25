@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
             String firstName = getIntent().getStringExtra("firstName");
             String lastName = getIntent().getStringExtra("lastName");
             String imageURL = getIntent().getStringExtra("profileImage");
+            Log.d("image", imageURL);
             String email = getIntent().getStringExtra("email");
             String id = getIntent().getStringExtra("id");
 

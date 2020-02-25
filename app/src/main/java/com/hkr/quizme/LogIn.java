@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -35,6 +34,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
+    //Facebook text account:
+
+    //freddie_xibtgzr_mercury@tfbnw.net
+    //test_konto
+
     private EditText userNameInput, passwordInput;
     private Button logInBtn;
     private TextView signUpBtn;
@@ -51,7 +55,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         LoginManager.getInstance().logOut();
 
         //Initialize the views
-        userNameInput = findViewById(R.id.userNameInput);
+        userNameInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.passwordInput);
         logInBtn = findViewById(R.id.signInBtn);
         signUpBtn = findViewById(R.id.signUpText);
@@ -59,7 +63,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         logoBtn = findViewById(R.id.logo_image_log_in);
 
         callbackManager = CallbackManager.Factory.create();
-        logInWithFB.setReadPermissions("public_profile");
+        logInWithFB.setReadPermissions("email", "public_profile");
 
 
         logoBtn.setOnClickListener(this);
