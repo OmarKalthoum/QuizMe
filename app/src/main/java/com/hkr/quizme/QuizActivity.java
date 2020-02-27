@@ -49,37 +49,37 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-            TransitionDrawable transition = (TransitionDrawable) v.getBackground();
-            transition.startTransition(300);
-            if (v == button1) {
-                setTransitionGrey(button2);
-                setTransitionGrey(button3);
-                setTransitionGrey(button4);
-                QuizHolder.getInstance().registerUserAnswer(0);
-            }
-            if (v == button2) {
-                setTransitionGrey(button1);
-                setTransitionGrey(button3);
-                setTransitionGrey(button4);
-                QuizHolder.getInstance().registerUserAnswer(1);
-            }
-            if (v == button3) {
-                setTransitionGrey(button2);
-                setTransitionGrey(button1);
-                setTransitionGrey(button4);
-                QuizHolder.getInstance().registerUserAnswer(2);
-            }
-            if (v == button4) {
-                setTransitionGrey(button2);
-                setTransitionGrey(button1);
-                setTransitionGrey(button3);
-                QuizHolder.getInstance().registerUserAnswer(3);
-            }
-            QuizHolder.getInstance().incrementCurrentQuestion();
-            if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getMaxPoints()) {
-                Intent intent = new Intent(this, QuizResultActivity.class);
-                startActivity(intent);
-            }
+        TransitionDrawable transition = (TransitionDrawable) v.getBackground();
+        transition.startTransition(300);
+        if (v == button1) {
+            setTransitionGrey(button2);
+            setTransitionGrey(button3);
+            setTransitionGrey(button4);
+            QuizHolder.getInstance().registerUserAnswer(0);
+        }
+        if (v == button2) {
+            setTransitionGrey(button1);
+            setTransitionGrey(button3);
+            setTransitionGrey(button4);
+            QuizHolder.getInstance().registerUserAnswer(1);
+        }
+        if (v == button3) {
+            setTransitionGrey(button2);
+            setTransitionGrey(button1);
+            setTransitionGrey(button4);
+            QuizHolder.getInstance().registerUserAnswer(2);
+        }
+        if (v == button4) {
+            setTransitionGrey(button2);
+            setTransitionGrey(button1);
+            setTransitionGrey(button3);
+            QuizHolder.getInstance().registerUserAnswer(3);
+        }
+        QuizHolder.getInstance().incrementCurrentQuestion();
+        if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getMaxPoints()) {
+            Intent intent = new Intent(this, QuizResultActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void setTransitionGrey(Button button) {
@@ -97,7 +97,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 finish();
             }
-        }, 0);
+        }, 300);
         */
     }
 

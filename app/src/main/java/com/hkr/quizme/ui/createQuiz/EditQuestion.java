@@ -1,10 +1,6 @@
-package com.hkr.quizme;
+package com.hkr.quizme.ui.createQuiz;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -12,19 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hkr.quizme.ui.createQuiz.CreateQuizAdapter;
-import com.hkr.quizme.ui.createQuiz.CreateQuizFragment;
+import com.hkr.quizme.R;
 
-import java.util.Objects;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static com.hkr.quizme.ui.createQuiz.CreateQuizAdapter.questions;
-import static com.hkr.quizme.ui.createQuiz.CreateQuizFragment.fragmentManager2;
 
 public class EditQuestion extends AppCompatActivity {
     private Button done;
     private TextView questionNumber;
     private EditText question, correctAnswerOne, correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
-    //private final int position = Integer.parseInt(Objects.requireNonNull(getIntent().getStringExtra("position")));
 
 
     @Override
@@ -58,10 +51,14 @@ public class EditQuestion extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 view.startAnimation(animation);
-                Log.d("OMAR:", getIntent().getStringExtra("position"));
                 questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setQuestion(question.getText().toString());
-                /*CreateQuizFragment createQuizFragment = new CreateQuizFragment();
-                createQuizFragment.showDialog(fragmentManager2);*/
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setCorrectAnswerOne(correctAnswerOne.getText().toString());
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setCorrectAnswerTwo(correctAnswerTwo.getText().toString());
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerOne(wrongAnswerOne.getText().toString());
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerTwo(wrongAnswerTwo.getText().toString());
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerThree(wrongAnswerThree.getText().toString());
+                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerFour(wrongAnswerFour.getText().toString());
+                finish();
             }
         });
     }

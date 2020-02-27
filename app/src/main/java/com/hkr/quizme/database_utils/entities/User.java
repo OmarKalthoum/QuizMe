@@ -20,6 +20,15 @@ public class User {
     private String email;
     private String hash;
     private int points;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public User(int id, String firstName, String lastName, String email, int points) {
         this.id = id;

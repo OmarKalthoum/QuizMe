@@ -2,9 +2,10 @@ package com.hkr.quizme.ui.createQuiz;
 
 public class Question {
     private String question, correctAnswerOne, correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
+    private int questionNumber;
 
-
-    public Question(String question, String correctAnswerOne, String correctAnswerTwo, String wrongAnswerOne, String wrongAnswerTwo, String wrongAnswerThree, String wrongAnswerFour) {
+    public Question(int questionNumber, String question, String correctAnswerOne, String correctAnswerTwo, String wrongAnswerOne, String wrongAnswerTwo, String wrongAnswerThree, String wrongAnswerFour) {
+        this.questionNumber = questionNumber;
         this.question = question;
         this.correctAnswerOne = correctAnswerOne;
         this.correctAnswerTwo = correctAnswerTwo;
@@ -12,6 +13,15 @@ public class Question {
         this.wrongAnswerTwo = wrongAnswerTwo;
         this.wrongAnswerThree = wrongAnswerThree;
         this.wrongAnswerFour = wrongAnswerFour;
+    }
+
+
+    public int getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
     }
 
     public String getQuestion() {

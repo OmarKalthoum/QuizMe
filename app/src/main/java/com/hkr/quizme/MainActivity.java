@@ -1,7 +1,6 @@
 package com.hkr.quizme;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,7 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView profilPic;
-    private TextView userName, levelTxt;
+    private TextView userName, rankTextView, levelInDigits;
     private ProgressBar levelBarMain;
     private AppBarConfiguration mAppBarConfiguration;
     private static int backCounter = 0;
@@ -34,28 +33,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        levelInDigits = findViewById(R.id.level_in_digits);
         profilPic = findViewById(R.id.profileImageMain);
         userName = findViewById(R.id.userNameMain);
-        levelTxt = findViewById(R.id.levelTxt);
+        rankTextView = findViewById(R.id.RankTextView);
         levelBarMain = findViewById(R.id.levelBarMain);
 
-        if (getIntent().getStringExtra("fb") != null) {
-            //The user logged in with Fb
-            //TODO: Save the info into data base
-            String firstName = getIntent().getStringExtra("firstName");
-            String lastName = getIntent().getStringExtra("lastName");
-            String imageURL = getIntent().getStringExtra("profileImage");
-            Log.d("image", imageURL);
-            String email = getIntent().getStringExtra("email");
-            String id = getIntent().getStringExtra("id");
-
-            Glide.with(this).load(imageURL).into(profilPic);
-            userName.setText(firstName + " " + lastName);
-        } else if (CurrentUser.getInstance().getUser() != null) {
-            userName.setText(CurrentUser.getInstance().getUser().getFirstName());
+        if (CurrentUser.getInstance().getUser() != null) {
+            // String imageURL = getIntent().getStringExtra("profileImage");
+            if (CurrentUser.getInstance().getUser().getImage() != null) {
+                Glide.with(this).load(CurrentUser.getInstance().getUser().getImage()).into(profilPic);
+            }
+            userName.setText(CurrentUser.getInstance().getUser().getFirstName() + " " + CurrentUser.getInstance().getUser().getLastName());
             Rankings rankings = new Rankings();
-            levelTxt.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
+            rankTextView.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
             levelBarMain.setProgress(rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
+            levelInDigits.setText(rankings.getProgressPercent(CurrentUser.getInstance().getUser()) + "%");
             System.out.println("RANKING:" + rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
         }
 

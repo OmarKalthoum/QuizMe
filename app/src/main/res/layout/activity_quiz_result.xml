@@ -9,12 +9,16 @@
 
     <ProgressBar
         android:id="@+id/resultProgBar"
-        style="?android:attr/progressBarStyle"
-        android:progressDrawable="@drawable/prog_bar_background"
-        android:indeterminateDrawable="@drawable/prog_bar_background"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/prog_bar_style"
+        android:background="@drawable/prog_bar_background"
+        android:indeterminate="false"
+        android:progress="0"
+        android:max="100"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="68dp"
+        android:secondaryProgress="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +87,8 @@
         android:layout_width="186dp"
         android:layout_height="33dp"
         android:layout_marginTop="56dp"
+        android:scaleY="3"
+        android:progressTint="#9EBB7D"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,5 +106,15 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resultComment" />
+
+    <TextView
+        android:id="@+id/levelInDigitsResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/levelProgBar"
+        app:layout_constraintEnd_toEndOf="@+id/levelProgBar"
+        app:layout_constraintStart_toStartOf="@+id/levelProgBar"
+        app:layout_constraintTop_toTopOf="@+id/levelProgBar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

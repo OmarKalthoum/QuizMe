@@ -15,7 +15,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Main2Activity"></activity>
         <activity
-            android:name=".EditQuestion"
+            android:name=".ui.createQuiz.EditQuestion"
             android:screenOrientation="portrait" />
         <activity
             android:name=".QuizResultActivity"

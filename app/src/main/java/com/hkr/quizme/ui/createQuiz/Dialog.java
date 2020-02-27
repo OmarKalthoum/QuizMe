@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
+
 import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
@@ -25,10 +26,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class Dialog extends DialogFragment implements View.OnClickListener {
 
-    private RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     private CreateQuizAdapter createQuizAdapter;
     private Button createQuizAfterReviewBtn;
-    private LinkedList<Question> questions = new LinkedList<>();
+    private LinkedList<Question> questions;
+    private int i = 0;
+
 
     @Nullable
     @Override
@@ -38,11 +41,9 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         recyclerView = view.findViewById(R.id.review_recycler_view);
         createQuizAfterReviewBtn = view.findViewById(R.id.create_quiz_after_review);
         createQuizAfterReviewBtn.setOnClickListener(this);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        createQuizAdapter = new CreateQuizAdapter(this.getContext(), bringQuestion());
+        createQuizAdapter = new CreateQuizAdapter(this.getContext(), bringQuestions());
         recyclerView.setAdapter(createQuizAdapter);
-
 
         return view;
     }
@@ -50,8 +51,13 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        if (i > 0) {
+            createQuizAdapter = new CreateQuizAdapter(this.getContext(), questions);
+            recyclerView.setAdapter(createQuizAdapter);
+        }
+        i = 1;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        //getDialog().setCancelable(false);
+        getDialog().setCancelable(false);
         WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = 900;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -66,23 +72,21 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         if (v == createQuizAfterReviewBtn) {
             v.startAnimation(animation);
             //Todo: save the created quiz to the database
-
             Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
         }
     }
 
-    public LinkedList<Question> bringQuestion() {
-
+    public LinkedList<Question> bringQuestions() {
+        questions = new LinkedList<>();
         //TODO: Bring all the created questions by the user and add them to the question linkedlist
         for (int i = 1; i < 10; i++) {
-            questions.add(new Question(i + ": The time factor when determining the efficiency of algorithm is measured by",
+            questions.add(new Question(i, i + ": The time factor when determining the efficiency of algorithm is measured by",
                     "Counting the number of key operations", "",
                     "Counting microseconds", "Counting the number of statements",
                     "Counting the kilobytes of algorithm", "Counting the kilobytes of algorithm"));
         }
-
         return questions;
     }
 }

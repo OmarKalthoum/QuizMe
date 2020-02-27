@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,19 +17,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.snackbar.Snackbar;
 import com.hkr.quizme.global_data.CurrentUser;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.utils.Rankings;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class QuizResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button menuBtn;
     private Context context;
-    private TextView reportBtn, resultComment, levelTxt, resultTxt;
+    private TextView reportBtn, resultComment, levelTxt, resultTxt, levelInDigits;
     private ProgressBar resultProgBar, levelProgBar;
     private byte rating = 0;
+    private int counterProgressResult = 0;
+    private Handler handler = new Handler();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -38,6 +42,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
 
         context = this;
         menuBtn = findViewById(R.id.menuBtn);
+        levelInDigits = findViewById(R.id.levelInDigitsResult);
         reportBtn = findViewById(R.id.reportBtn);
         resultComment = findViewById(R.id.resultComment);
         levelTxt = findViewById(R.id.levelTextView);
@@ -45,26 +50,50 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         resultProgBar = findViewById(R.id.resultProgBar);
         levelProgBar = findViewById(R.id.levelProgBar);
 
-        resultProgBar.setMax(QuizHolder.getInstance().getMaxPoints());
-        resultProgBar.setProgress(QuizHolder.getInstance().getPoints());
-        resultTxt.setText(Integer.toString(QuizHolder.getInstance().getResultPercentage()) + "%");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (counterProgressResult <= QuizHolder.getInstance().getResultPercentage()) {
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            resultProgBar.setProgress(counterProgressResult);
+                            resultTxt.setText(counterProgressResult + "%");
+                            if (counterProgressResult < 50) {
+                                resultComment.setText("KEEP TRYING " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                            } else if (counterProgressResult < 70) {
+                                resultComment.setText("GOOD JOB " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                            } else if (counterProgressResult < 85) {
+                                resultComment.setText("GREAT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                            } else {
+                                resultComment.setText("EXCELLENT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                if (counterProgressResult == 100) {
+                                    Snackbar.make(resultProgBar, "You did amazing in this quiz. Well done!", Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    counterProgressResult++;
+                }
+            }
+        }).start();
+
+
         int newPoints = CurrentUser.getInstance().getUser().getPoints() + QuizHolder.getInstance().getPoints();
         CurrentUser.getInstance().getUser().setPoints(newPoints);
         CurrentUser.getInstance().getUser().updatePoints();
         levelProgBar.setMax(100);
         levelProgBar.setProgress(new Rankings().getProgressPercent(CurrentUser.getInstance().getUser()));
+
+        levelInDigits.setText(String.valueOf(levelProgBar.getProgress()) + "%");
         levelTxt.setText(new Rankings().getRanking(CurrentUser.getInstance().getUser()).getName());
         menuBtn.setOnClickListener(this);
         reportBtn.setOnClickListener(this);
-        if(QuizHolder.getInstance().getResultPercentage() <50) {
-            resultComment.setText("KEEP TRYING");
-        } else if(QuizHolder.getInstance().getResultPercentage() < 70) {
-            resultComment.setText("GOOD JOB");
-        } else if(QuizHolder.getInstance().getResultPercentage() < 85){
-            resultComment.setText("GREAT");
-        } else {
-            resultComment.setText("EXCELLENT");
-        }
 
     }
 
@@ -97,7 +126,6 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         final Button cancelBtn = feedBackDialog.findViewById(R.id.cancel_button);
 
         feedBackDialog.setCancelable(false);
-
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +140,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
                 String email = feedbackEmail.getText().toString();
                 String content = feedbackContent.getText().toString();
 
-                //TODO: Take the information and display it to the admin
+                //TODO: Take the information and send it via mail
                 Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
                 feedBackDialog.dismiss();
             }

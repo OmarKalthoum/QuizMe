@@ -10,7 +10,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
-import com.hkr.quizme.EditQuestion;
 import com.hkr.quizme.R;
 
 import java.util.LinkedList;
@@ -64,28 +63,18 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
                 intent.putExtra("wrongAnswerThree", questions.get(position).getWrongAnswerThree());
                 intent.putExtra("correctAnswerTwo", questions.get(position).getCorrectAnswerTwo());
                 intent.putExtra("wrongAnswerFour", questions.get(position).getWrongAnswerFour());
-                String pos = String.valueOf(position);
-                intent.putExtra("position", pos);
-                Log.d("OMAR:", String.valueOf(pos));
+                intent.putExtra("position", String.valueOf(position));
 
                 context.startActivity(intent);
 
-                // TODO::: Start an activity where the user can edit the desired question
             }
         });
         deleteQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.startAnimation(animation);
-                //TOdO::: delete the marked question
-
-             /*
                 questions.remove(position);
-
-                // call the dialog again
-                CreateQuizFragment createQuizFragment = new CreateQuizFragment();
-                createQuizFragment.showDialog(fragmentManager2);*/
-
+                // TODO: call the dialog again
             }
         });
     }

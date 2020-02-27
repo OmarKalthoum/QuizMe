@@ -1,5 +1,7 @@
 package com.hkr.quizme.ui.createQuiz;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +16,9 @@ import android.widget.TextView;
 import com.hkr.quizme.R;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 public class CreateQuizFragment extends Fragment implements View.OnClickListener {
@@ -25,14 +28,11 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
     private TextView questionNumber, addCorrectAnswerText, addWrongAnswerText;
     private Button finishCreating, nextQuestion;
     private ImageButton addCorrectAnswer, addWrongAnswer;
-    public static FragmentManager fragmentManager2;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         createQuizViewModel = ViewModelProviders.of(this).get(CreateQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_create_quiz, container, false);
-
-        fragmentManager2 = getFragmentManager();
 
         correctAnswerOne = root.findViewById(R.id.correct_answer_input);
         wrongAnswerOne = root.findViewById(R.id.wrong_answer_one);
@@ -40,20 +40,20 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         wrongAnswerThree = root.findViewById(R.id.wrong_answer_three);
         question = root.findViewById(R.id.question_input);
         questionNumber = root.findViewById(R.id.question_amount);
+        correctAnswerTwo = root.findViewById(R.id.correct_answer_two);
+        wrongAnswerFour = root.findViewById(R.id.wrong_answer_four);
+
         addCorrectAnswer = root.findViewById(R.id.add_correct_answer);
         addWrongAnswer = root.findViewById(R.id.add_wrong_answer);
         finishCreating = root.findViewById(R.id.finish_create_quiz);
         nextQuestion = root.findViewById(R.id.done);
         addCorrectAnswerText = root.findViewById(R.id.add_correct_answer_text);
         addWrongAnswerText = root.findViewById(R.id.add_wrong_answer_text);
-        correctAnswerTwo = root.findViewById(R.id.correct_answer_two);
-        wrongAnswerFour = root.findViewById(R.id.wrong_answer_four);
 
         addCorrectAnswer.setOnClickListener(this);
         addWrongAnswer.setOnClickListener(this);
         nextQuestion.setOnClickListener(this);
         finishCreating.setOnClickListener(this);
-
 
         return root;
     }
@@ -63,7 +63,15 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.blink_anim);
         if (v == nextQuestion) {
             v.startAnimation(animation);
-            //TODO: save the question with the corresponding alternatives and move to next intent to create the next question
+            //TODO: save the question with the corresponding alternatives and reload the fragment to create the next question
+
+
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (Build.VERSION.SDK_INT >= 26) {
+                ft.setReorderingAllowed(false);
+            }
+            ft.detach(this).attach(this).commit();
+            return;
         }
         if (v == addCorrectAnswer) {
             addCorrectAnswer.setVisibility(View.INVISIBLE);
@@ -78,14 +86,18 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         }
         if (v == finishCreating) {
             v.startAnimation(animation);
-            showDialog(getFragmentManager());
+            showDialog();
         }
 
     }
 
-    public void showDialog( FragmentManager fragmentManager) {
-
+    public void showDialog() {
         final Dialog dialog = new Dialog();
-        dialog.show(fragmentManager, "Quiz");
+        dialog.show(getFragmentManager(), "Quiz");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

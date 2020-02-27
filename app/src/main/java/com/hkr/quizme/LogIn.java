@@ -148,7 +148,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
-
                 try {
                     User user = new User(object.getString("first_name"), object.getString("last_name"), object.getString("email"));
                     User foundUser = user.findUser(emailInput.getContext());
@@ -159,9 +158,10 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                         user.registerFacebook();
                         CurrentUser.getInstance().setUser(user.findUser(emailInput.getContext()));
                     }
+                    String profileImage = "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large&redirect=true&width=600&height=600";
+                    user.setImage(profileImage);
                     Intent mainIntent = new Intent(logInBtn.getContext(), MainActivity.class);
                     startActivity(mainIntent);
-                    //profileImage = "https://graph.facebook.com/" + id + "/picture?type=large&redirect=true&width=600&height=600";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

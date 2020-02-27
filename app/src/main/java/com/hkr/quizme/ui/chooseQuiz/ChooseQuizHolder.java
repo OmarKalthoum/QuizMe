@@ -19,6 +19,7 @@ public class ChooseQuizHolder extends RecyclerView.ViewHolder {
     public int pos;
 
     private LinearLayout linearLayout;
+
     public ChooseQuizHolder(@NonNull View itemView) {
         super(itemView);
 
