@@ -95,4 +95,18 @@ public class UserDAO implements DAO<User> {
         }
         return DAOUtils.generateConnectionError();
     }
+
+    public boolean updateUserPoints(User object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("email", object.getEmail());
+            params.put("points", object.getPoints());
+            JSONObject response = communicator.apiCallForResponse("/update-user-points", "POST", params);
+            return response.getBoolean("success");
+        } catch (JSONException exception) {
+            Log.e("UserDAO::", exception.toString());
+            return false;
+        }
+    }
 }

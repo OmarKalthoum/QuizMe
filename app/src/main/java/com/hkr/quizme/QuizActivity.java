@@ -48,52 +48,57 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        QuizHolder.getInstance().incrementCurrentQuestion();
-        if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getQuiz().getQuestions().size()) {
-            QuizHolder.getInstance().setCurrentQuestion(0);
-            Intent intent = new Intent(this, QuizResultActivity.class);
-            startActivity(intent);
-        } else {
+
             TransitionDrawable transition = (TransitionDrawable) v.getBackground();
             transition.startTransition(300);
             if (v == button1) {
                 setTransitionGrey(button2);
                 setTransitionGrey(button3);
                 setTransitionGrey(button4);
+                QuizHolder.getInstance().registerUserAnswer(0);
             }
             if (v == button2) {
                 setTransitionGrey(button1);
                 setTransitionGrey(button3);
                 setTransitionGrey(button4);
+                QuizHolder.getInstance().registerUserAnswer(1);
             }
             if (v == button3) {
                 setTransitionGrey(button2);
                 setTransitionGrey(button1);
                 setTransitionGrey(button4);
+                QuizHolder.getInstance().registerUserAnswer(2);
             }
             if (v == button4) {
                 setTransitionGrey(button2);
                 setTransitionGrey(button1);
                 setTransitionGrey(button3);
+                QuizHolder.getInstance().registerUserAnswer(3);
             }
-        }
+            QuizHolder.getInstance().incrementCurrentQuestion();
+            if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getMaxPoints()) {
+                Intent intent = new Intent(this, QuizResultActivity.class);
+                startActivity(intent);
+            }
     }
 
     public void setTransitionGrey(Button button) {
         button.setBackground(getDrawable(R.drawable.transition_button_grey));
-        TransitionDrawable transition2 = (TransitionDrawable) button.getBackground();
-        transition2.startTransition(100);
+        //TransitionDrawable transition2 = (TransitionDrawable) button.getBackground();
+        //transition2.startTransition(100);
         button.setClickable(false);
+        Intent intent = new Intent(QuizActivity.this, QuizActivity.class);
+        startActivity(intent);
 
-        new Handler().postDelayed(new Runnable() {
+        /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(QuizActivity.this, QuizActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, 500);
-
+        }, 0);
+        */
     }
 
     @Override

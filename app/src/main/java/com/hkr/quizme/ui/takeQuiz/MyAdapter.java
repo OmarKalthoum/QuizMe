@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
 import com.hkr.quizme.R;
+import com.hkr.quizme.database_utils.entities.Subject;
+import com.hkr.quizme.global_data.SubjectHolder;
 import com.hkr.quizme.ui.chooseQuiz.ChooseQuizFragment;
 
 import java.util.List;
@@ -42,26 +44,26 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
     public void onBindParentViewHolder(ParentViewHolder parentViewHolder, int i, Object o) {
         Parent title = (Parent) o;
         parentViewHolder.title.setText(title.getName());
-
     }
 
     @Override
     public void onBindChildViewHolder(ChildViewHolder childViewHolder, int i, Object o) {
-        Child title = (Child) o;
+        final Child title = (Child) o;
         childViewHolder.textViewName.setText(title.getName());
-
+        childViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                ChooseQuizFragment myFragment = new ChooseQuizFragment();
+                SubjectHolder.getInstance().setSubject(new Subject(title.getId(), title.getName()));
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         // TODO : START NEW ACTIVITY
-        AppCompatActivity activity = (AppCompatActivity) v.getContext();
-        ChooseQuizFragment myFragment = new ChooseQuizFragment();
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
 
-     /*   QuizHolder.getInstance().initialize(1);
-
-        Intent intent = new Intent(v.getContext(), QuizActivity.class);
-        v.getContext().startActivity(intent);*/
     }
 }

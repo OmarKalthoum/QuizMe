@@ -12,6 +12,7 @@ public class QuizHolder {
     private static QuizHolder instance;
     private Quiz quiz;
     private int currentQuestion;
+    private int points;
 
     public static QuizHolder getInstance() {
         if (instance == null) {
@@ -28,14 +29,40 @@ public class QuizHolder {
         try {
             quiz = new InitializeQuizTask().execute(quizId).get();
             currentQuestion = 0;
+            points = 0;
         } catch (ExecutionException | InterruptedException exception) {
             Log.d("QuizHolder::", exception.getMessage());
             quiz = null;
         }
     }
 
+    public void reset() {
+        quiz = null;
+        currentQuestion = 0;
+        points = 0;
+    }
+
     public Quiz getQuiz() {
         return quiz;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void registerUserAnswer(int id) {
+        if (quiz.getQuestions().get(currentQuestion).getAnswers().get(id).isCorrect()) {
+            points++;
+        }
+        Log.d("POIKMS::", Integer.toString(points));
+    }
+
+    public int getMaxPoints() {
+        return quiz.getQuestions().size();
+    }
+
+    public int getResultPercentage() {
+        return (int)(((double)points / getMaxPoints()) * 100);
     }
 
     public int getCurrentQuestion() {

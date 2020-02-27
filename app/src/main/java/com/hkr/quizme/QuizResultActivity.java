@@ -1,5 +1,6 @@
 package com.hkr.quizme;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hkr.quizme.global_data.CurrentUser;
+import com.hkr.quizme.global_data.QuizHolder;
+import com.hkr.quizme.utils.Rankings;
+
 public class QuizResultActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button menuBtn;
@@ -25,6 +30,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     private ProgressBar resultProgBar, levelProgBar;
     private byte rating = 0;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +45,32 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         resultProgBar = findViewById(R.id.resultProgBar);
         levelProgBar = findViewById(R.id.levelProgBar);
 
+        resultProgBar.setMax(QuizHolder.getInstance().getMaxPoints());
+        resultProgBar.setProgress(QuizHolder.getInstance().getPoints());
+        resultTxt.setText(Integer.toString(QuizHolder.getInstance().getResultPercentage()) + "%");
+        int newPoints = CurrentUser.getInstance().getUser().getPoints() + QuizHolder.getInstance().getPoints();
+        CurrentUser.getInstance().getUser().setPoints(newPoints);
+        CurrentUser.getInstance().getUser().updatePoints();
+        levelProgBar.setMax(100);
+        levelProgBar.setProgress(new Rankings().getProgressPercent(CurrentUser.getInstance().getUser()));
+        levelTxt.setText(new Rankings().getRanking(CurrentUser.getInstance().getUser()).getName());
         menuBtn.setOnClickListener(this);
         reportBtn.setOnClickListener(this);
+        if(QuizHolder.getInstance().getResultPercentage() <50) {
+            resultComment.setText("KEEP TRYING");
+        } else if(QuizHolder.getInstance().getResultPercentage() < 70) {
+            resultComment.setText("GOOD JOB");
+        } else if(QuizHolder.getInstance().getResultPercentage() < 85){
+            resultComment.setText("GREAT");
+        } else {
+            resultComment.setText("EXCELLENT");
+        }
 
     }
 
     @Override
     public void onClick(View v) {
         if (v == menuBtn) {
-
             showRatingDialog();
         }
         if (v == reportBtn) {
@@ -96,7 +119,6 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         });
 
         feedBackDialog.show();
-
     }
 
     private void showRatingDialog() {
@@ -111,14 +133,13 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         final ImageButton three_rate_icon = dialog.findViewById(R.id.three_rate_icon);
         final ImageButton four_rate_icon = dialog.findViewById(R.id.four_rate_icon);
         final ImageButton five_rate_icon = dialog.findViewById(R.id.five_rate_icon);
-        final Button caneclBtn = dialog.findViewById(R.id.cancelBtn);
+        final Button cancelButton = dialog.findViewById(R.id.cancelBtn);
         dialog.setCancelable(false);
 
-
-        caneclBtn.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                caneclBtn.startAnimation(animation);
+                cancelButton.startAnimation(animation);
                 moveToMain();
             }
         });
@@ -170,17 +191,16 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         });
 
         dialog.show();
-
     }
 
     public void moveToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
-
     }
 
     public void saveRatingToDB() {
         //TODO: save the rating to database if it is not 0 before returning to the main menu
+        QuizHolder.getInstance().getQuiz().rate(CurrentUser.getInstance().getUser().getId(), rating);
     }
 }

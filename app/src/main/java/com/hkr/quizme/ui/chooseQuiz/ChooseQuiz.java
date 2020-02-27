@@ -1,12 +1,23 @@
 package com.hkr.quizme.ui.chooseQuiz;
 
 public class ChooseQuiz {
+    private int id;
+    private String title;
+    private double rating;
 
-    private String title, rating;
-
-    public ChooseQuiz(String title, String rating) {
+    public ChooseQuiz(String title, double rating) {
         this.title = title;
         this.rating = rating;
+    }
+
+    public ChooseQuiz(int id, String title, double rating) {
+        this.id = id;
+        this.title = title;
+        this.rating = rating;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -17,11 +28,7 @@ public class ChooseQuiz {
         this.title = title;
     }
 
-    public String getRating() {
+    public double getRating() {
         return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
     }
 }

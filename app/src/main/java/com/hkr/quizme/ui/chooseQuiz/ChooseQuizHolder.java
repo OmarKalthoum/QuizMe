@@ -25,16 +25,5 @@ public class ChooseQuizHolder extends RecyclerView.ViewHolder {
         title = itemView.findViewById(R.id.title_text_view_choose_quiz);
         rating = itemView.findViewById(R.id.rating_text_view_choose_quiz);
         linearLayout = itemView.findViewById(R.id.clickCardView);
-
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                QuizHolder.getInstance().initialize(1);
-                Intent intent = new Intent(v.getContext(), QuizActivity.class);
-                v.getContext().startActivity(intent);
-            }
-        });
-
     }
-
 }

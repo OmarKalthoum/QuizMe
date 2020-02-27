@@ -44,6 +44,10 @@ public class User {
         this.hash = handler.hash(password);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -85,6 +89,15 @@ public class User {
             return new RegisterUserTask().execute(this).get();
         } catch (InterruptedException | ExecutionException exception) {
             Log.e("User:::", exception.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updatePoints() {
+        try {
+            return new UpdatePointsTask().execute(this).get();
+        } catch (ExecutionException | InterruptedException exception) {
+            Log.e("User::", exception.toString());
             return false;
         }
     }
@@ -207,6 +220,13 @@ public class User {
         protected JSONObject doInBackground(User... users) {
             UserDAO dao = new UserDAO();
             return dao.findUser(users[0]);
+        }
+    }
+
+    private static class UpdatePointsTask extends AsyncTask<User, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(User... users) {
+            return new UserDAO().updateUserPoints(users[0]);
         }
     }
 }

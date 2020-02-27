@@ -1,11 +1,7 @@
 package com.hkr.quizme.database_utils;
 
-import android.util.JsonWriter;
 import android.util.Log;
-
-import com.hkr.quizme.database_utils.entities.Answer;
 import com.hkr.quizme.database_utils.entities.Question;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +40,7 @@ public class QuestionDAO implements DAO<Question> {
                 AnswerDAO answerDAO = new AnswerDAO();
                 current.setAnswers(answerDAO.getIncorrectAnswers(current.getId()));
                 current.getAnswers().add(answerDAO.getCorrectAnswer(current.getId()));
+                current.scrambleAnswers();
                 result.add(current);
                 Log.d("QUESTION_DAO::", current.getQuestion());
             }
