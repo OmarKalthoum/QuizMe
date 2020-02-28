@@ -74,6 +74,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
                                 }
                             }
                         });
+                        counterProgressResult++;
                         try {
                             Thread.sleep(50);
                         } catch (InterruptedException e) {
