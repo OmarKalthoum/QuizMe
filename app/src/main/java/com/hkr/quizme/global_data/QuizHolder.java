@@ -9,15 +9,12 @@ import com.hkr.quizme.database_utils.entities.Quiz;
 import java.util.concurrent.ExecutionException;
 
 public class QuizHolder {
-    private static QuizHolder instance;
+    private final static QuizHolder instance = new QuizHolder();
     private Quiz quiz;
     private int currentQuestion;
     private int points;
 
     public static QuizHolder getInstance() {
-        if (instance == null) {
-            instance = new QuizHolder();
-        }
         return instance;
     }
 
