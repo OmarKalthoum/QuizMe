@@ -79,7 +79,6 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        counterProgressResult++;
                     }
                 }
             }).start();
@@ -94,11 +93,10 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         levelProgBar.setMax(100);
         levelProgBar.setProgress(new Rankings().getProgressPercent(CurrentUser.getInstance().getUser()));
 
-        levelInDigits.setText(String.valueOf(levelProgBar.getProgress()) + "%");
+        levelInDigits.setText(levelProgBar.getProgress() + "%");
         levelTxt.setText(new Rankings().getRanking(CurrentUser.getInstance().getUser()).getName());
         menuBtn.setOnClickListener(this);
         reportBtn.setOnClickListener(this);
-
     }
 
     @Override

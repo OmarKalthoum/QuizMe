@@ -3,12 +3,10 @@ package com.hkr.quizme.global_data;
 import com.hkr.quizme.database_utils.entities.Subject;
 
 public class SubjectHolder {
-    private static SubjectHolder instance;
+    private final static SubjectHolder instance = new SubjectHolder();
     private Subject subject;
 
     public static SubjectHolder getInstance() {
-        if (instance == null)
-            instance = new SubjectHolder();
         return instance;
     }
 

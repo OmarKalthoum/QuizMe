@@ -3,13 +3,10 @@ package com.hkr.quizme.global_data;
 import com.hkr.quizme.database_utils.entities.User;
 
 public class CurrentUser {
-    private static CurrentUser instance;
+    private final static CurrentUser instance = new CurrentUser();
     private User user;
 
     public static CurrentUser getInstance() {
-        if (instance == null) {
-            instance = new CurrentUser();
-        }
         return instance;
     }
 

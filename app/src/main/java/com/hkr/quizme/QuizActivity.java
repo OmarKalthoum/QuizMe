@@ -1,5 +1,6 @@
 package com.hkr.quizme;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,14 +17,19 @@ import android.widget.Toast;
 import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.ui.chooseQuiz.ChooseQuiz;
+import com.hkr.quizme.timers.UpdatingTimer;
+import com.hkr.quizme.timers.TimerListener;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class QuizActivity extends AppCompatActivity implements View.OnClickListener {
-
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener, TimerListener {
+    private final int TIME_TO_ANSWER = 20;
     private Button button1, button2, button3, button4;
     private TextView timer, totalQuestions, question;
+    private UpdatingTimer questionTimer;
+    private Handler handler;
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         totalQuestions = findViewById(R.id.totalQuestions);
         question = findViewById(R.id.question);
 
+        totalQuestions.setText(String.format("%d/%d", QuizHolder.getInstance().getCurrentQuestion() + 1, QuizHolder.getInstance().getMaxPoints()));
+
         question.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getQuestion());
         button1.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(0).getAnswer());
         button2.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(1).getAnswer());
@@ -55,42 +63,42 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         button2.setOnClickListener(this);
         button3.setOnClickListener(this);
         button4.setOnClickListener(this);
+
+        timer.setText(Integer.toString(TIME_TO_ANSWER));
+        handler = new Handler();
+        questionTimer = new UpdatingTimer(this, TIME_TO_ANSWER);
+        new Thread(questionTimer).start();
     }
 
     @Override
     public void onClick(View v) {
-
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
         transition.startTransition(300);
         if (v == button1) {
-            setTransitionGrey(button2);
-            setTransitionGrey(button3);
-            setTransitionGrey(button4);
             QuizHolder.getInstance().registerUserAnswer(0);
+            /*setTransitionGrey(button2);
+            setTransitionGrey(button3);
+            setTransitionGrey(button4);*/
         }
         if (v == button2) {
-            setTransitionGrey(button1);
+            /*setTransitionGrey(button1);
             setTransitionGrey(button3);
-            setTransitionGrey(button4);
+            setTransitionGrey(button4);*/
             QuizHolder.getInstance().registerUserAnswer(1);
         }
         if (v == button3) {
-            setTransitionGrey(button2);
+            /*setTransitionGrey(button2);
             setTransitionGrey(button1);
-            setTransitionGrey(button4);
+            setTransitionGrey(button4);*/
             QuizHolder.getInstance().registerUserAnswer(2);
         }
         if (v == button4) {
-            setTransitionGrey(button2);
+            /*setTransitionGrey(button2);
             setTransitionGrey(button1);
-            setTransitionGrey(button3);
+            setTransitionGrey(button3);*/
             QuizHolder.getInstance().registerUserAnswer(3);
         }
-        QuizHolder.getInstance().incrementCurrentQuestion();
-        if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getMaxPoints()) {
-            Intent intent = new Intent(this, QuizResultActivity.class);
-            startActivity(intent);
-        }
+        questionTimer.stop();
     }
 
     public void setTransitionGrey(Button button) {
@@ -110,6 +118,34 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
             }
         }, 300);
         */
+    }
+
+    @Override
+    public synchronized void onTimerUpdate(final int timeLeft) {
+        handler.post(new Runnable() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void run() {
+                timer.setText(Integer.toString(timeLeft));
+            }
+        });
+    }
+
+    @Override
+    public synchronized void onTimerStop() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                QuizHolder.getInstance().incrementCurrentQuestion();
+                if (QuizHolder.getInstance().getCurrentQuestion() >= QuizHolder.getInstance().getMaxPoints()) {
+                    Intent intent = new Intent(QuizActivity.this, QuizResultActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(QuizActivity.this, QuizActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
