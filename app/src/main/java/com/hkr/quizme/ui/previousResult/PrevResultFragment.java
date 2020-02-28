@@ -18,13 +18,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PrevResultFragment extends Fragment {
 
-    private PrevResultViewModel prevResultViewModel;
+   // private PrevResultViewModel prevResultViewModel;
     private RecyclerView recyclerView;
     private TextView textStatus;
     private LinkedList<Result> results;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        prevResultViewModel = ViewModelProviders.of(this).get(PrevResultViewModel.class);
+       // prevResultViewModel = ViewModelProviders.of(this).get(PrevResultViewModel.class);
 
         View root = inflater.inflate(R.layout.fragment_prev_result, container, false);
         textStatus = root.findViewById(R.id.text_status_prev_result);

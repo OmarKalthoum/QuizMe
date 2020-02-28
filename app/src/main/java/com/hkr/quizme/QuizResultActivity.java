@@ -50,39 +50,42 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         resultProgBar = findViewById(R.id.resultProgBar);
         levelProgBar = findViewById(R.id.levelProgBar);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (counterProgressResult <= QuizHolder.getInstance().getResultPercentage()) {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            resultProgBar.setProgress(counterProgressResult);
-                            resultTxt.setText(counterProgressResult + "%");
-                            if (counterProgressResult < 50) {
-                                resultComment.setText("KEEP TRYING " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
-                            } else if (counterProgressResult < 70) {
-                                resultComment.setText("GOOD JOB " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
-                            } else if (counterProgressResult < 85) {
-                                resultComment.setText("GREAT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
-                            } else {
-                                resultComment.setText("EXCELLENT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
-                                if (counterProgressResult == 100) {
-                                    Snackbar.make(resultProgBar, "You did amazing in this quiz. Well done!", Snackbar.LENGTH_LONG).show();
+        if (QuizHolder.getInstance().getResultPercentage() != 0) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (counterProgressResult <= QuizHolder.getInstance().getResultPercentage()) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                resultProgBar.setProgress(counterProgressResult);
+                                resultTxt.setText(counterProgressResult + "%");
+                                if (counterProgressResult < 50) {
+                                    resultComment.setText("KEEP TRYING " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                } else if (counterProgressResult < 70) {
+                                    resultComment.setText("GOOD JOB " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                } else if (counterProgressResult < 85) {
+                                    resultComment.setText("GREAT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                } else {
+                                    resultComment.setText("EXCELLENT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                    if (counterProgressResult == 100) {
+                                        Snackbar.make(resultProgBar, "You did amazing in this quiz. Well done!", Snackbar.LENGTH_LONG).show();
+                                    }
                                 }
                             }
+                        });
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
-                    });
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
-                    counterProgressResult++;
                 }
-            }
-        }).start();
+            }).start();
+        } else {
+            resultComment.setText("KEEP TRYING " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
 
+        }
 
         int newPoints = CurrentUser.getInstance().getUser().getPoints() + QuizHolder.getInstance().getPoints();
         CurrentUser.getInstance().getUser().setPoints(newPoints);

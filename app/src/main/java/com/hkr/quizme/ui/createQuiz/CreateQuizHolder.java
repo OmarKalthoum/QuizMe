@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CreateQuizHolder extends RecyclerView.ViewHolder {
-    public TextView question, correctAnswerOne,correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
+    public TextView question, correctAnswerOne, correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
 
     public CreateQuizHolder(@NonNull View itemView) {
         super(itemView);

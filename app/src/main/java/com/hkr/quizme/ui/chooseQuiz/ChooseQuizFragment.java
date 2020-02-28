@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ChooseQuizFragment extends Fragment {
-    private ChooseQuizViewModel chooseQuizViewModel;
+
     private TextView textStatus;
     private RecyclerView recyclerView;
 
@@ -33,7 +33,6 @@ public class ChooseQuizFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        chooseQuizViewModel = ViewModelProviders.of(this).get(ChooseQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_choose_quiz, container, false);
 
         textStatus = root.findViewById(R.id.text_status_choose_quiz);
