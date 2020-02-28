@@ -7,12 +7,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.QuizHolder;
+import com.hkr.quizme.ui.chooseQuiz.ChooseQuiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,6 +28,14 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        // get the answers of current question
+        if (!QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).fetchAnswers()) {
+            Toast.makeText(this, "An error occured, please try again.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, ChooseQuiz.class);
+            startActivity(intent);
+        }
+
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);

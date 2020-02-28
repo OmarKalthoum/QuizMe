@@ -1,6 +1,8 @@
 package com.hkr.quizme.database_utils;
 
 import android.util.Log;
+
+import com.hkr.quizme.database_utils.entities.Answer;
 import com.hkr.quizme.database_utils.entities.Question;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,10 +39,6 @@ public class QuestionDAO implements DAO<Question> {
             for (int i = 0; i < questions.length(); i++) {
                 JSONObject question = questions.getJSONObject(i);
                 Question current = new Question(question.getInt("id"), question.getString("question"));
-                AnswerDAO answerDAO = new AnswerDAO();
-                current.setAnswers(answerDAO.getIncorrectAnswers(current.getId()));
-                current.getAnswers().add(answerDAO.getCorrectAnswer(current.getId()));
-                current.scrambleAnswers();
                 result.add(current);
                 Log.d("QUESTION_DAO::", current.getQuestion());
             }
@@ -48,5 +46,29 @@ public class QuestionDAO implements DAO<Question> {
             Log.d("QUESTIONS:::", exception.getMessage());
         }
         return result;
+    }
+
+    public boolean fetchAnswers(Question object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("questionId", object.getId());
+            JSONObject response = communicator.apiCallForResponse("/full-question", "POST", params);
+            Log.d("QuestionDAO::", response.toString());
+            JSONArray incorrectAnswers = response.getJSONArray("incorrectAnswers");
+            List<Answer> answers = new ArrayList<>();
+            for (int i = 0; i < incorrectAnswers.length(); i++) {
+                JSONObject answer = incorrectAnswers.getJSONObject(i);
+                answers.add(new Answer(answer.getInt("id"), false, answer.getString("answer")));
+            }
+            JSONObject correctAnswer = response.getJSONObject("correctAnswer");
+            answers.add(new Answer(correctAnswer.getInt("id"), true, correctAnswer.getString("answer")));
+            object.setAnswers(answers);
+            object.scrambleAnswers();
+            return response.getBoolean("success");
+        } catch (JSONException exception) {
+            Log.e("QuestionDAO::", exception.toString());
+        }
+        return false;
     }
 }

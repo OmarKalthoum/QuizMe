@@ -27,8 +27,8 @@ class APICommunicator {
             connection.setRequestProperty("Accept", "application/json")
             connection.doOutput = true
             connection.doInput = true
-            connection.connectTimeout = 5000
-            connection.readTimeout = 5000
+            connection.connectTimeout = 10000
+            connection.readTimeout = 10000
 
             Log.d("NETWORK:::", "Sending request...")
             val outputStream = DataOutputStream(connection.outputStream)
