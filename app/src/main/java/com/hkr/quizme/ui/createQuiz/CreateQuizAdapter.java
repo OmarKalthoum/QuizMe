@@ -2,7 +2,6 @@ package com.hkr.quizme.ui.createQuiz;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,15 +55,7 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
             public void onClick(View v) {
                 v.startAnimation(animation);
                 Intent intent = new Intent(context, EditQuestion.class);
-                intent.putExtra("question", questions.get(position).getQuestion());
-                intent.putExtra("correctAnswerOne", questions.get(position).getCorrectAnswerOne());
-                intent.putExtra("wrongAnswerOne", questions.get(position).getWrongAnswerOne());
-                intent.putExtra("wrongAnswerTwo", questions.get(position).getWrongAnswerTwo());
-                intent.putExtra("wrongAnswerThree", questions.get(position).getWrongAnswerThree());
-                intent.putExtra("correctAnswerTwo", questions.get(position).getCorrectAnswerTwo());
-                intent.putExtra("wrongAnswerFour", questions.get(position).getWrongAnswerFour());
-                intent.putExtra("position", String.valueOf(position));
-
+                intent.putExtra("position", position);
                 context.startActivity(intent);
 
             }
@@ -74,7 +65,7 @@ public class CreateQuizAdapter extends RecyclerView.Adapter<CreateQuizHolder> {
             public void onClick(View v) {
                 v.startAnimation(animation);
                 questions.remove(position);
-                // TODO: call the dialog again
+                notifyDataSetChanged();
             }
         });
     }

@@ -1,10 +1,14 @@
 package com.hkr.quizme.ui.createQuiz;
 
+import java.util.LinkedList;
+
 public class Question {
     private String question, correctAnswerOne, correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
     private int questionNumber;
+    private static LinkedList<Question> questions;
 
-    public Question(int questionNumber, String question, String correctAnswerOne, String correctAnswerTwo, String wrongAnswerOne, String wrongAnswerTwo, String wrongAnswerThree, String wrongAnswerFour) {
+    public Question(int questionNumber, String question, String correctAnswerOne, String correctAnswerTwo, String wrongAnswerOne,
+                    String wrongAnswerTwo, String wrongAnswerThree, String wrongAnswerFour, LinkedList<Question> questions) {
         this.questionNumber = questionNumber;
         this.question = question;
         this.correctAnswerOne = correctAnswerOne;
@@ -13,8 +17,13 @@ public class Question {
         this.wrongAnswerTwo = wrongAnswerTwo;
         this.wrongAnswerThree = wrongAnswerThree;
         this.wrongAnswerFour = wrongAnswerFour;
+        this.questions = questions;
     }
 
+
+    public static LinkedList<Question> getQuestions() {
+        return questions;
+    }
 
     public int getQuestionNumber() {
         return questionNumber;

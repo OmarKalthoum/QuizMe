@@ -1,7 +1,6 @@
 package com.hkr.quizme.ui.createQuiz;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,26 +11,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hkr.quizme.R;
 
+import java.util.LinkedList;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
 
 public class CreateQuizFragment extends Fragment implements View.OnClickListener {
 
-    private CreateQuizViewModel createQuizViewModel;
     private EditText correctAnswerOne, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour, correctAnswerTwo, question;
     private TextView questionNumber, addCorrectAnswerText, addWrongAnswerText;
     private Button finishCreating, nextQuestion;
     private ImageButton addCorrectAnswer, addWrongAnswer;
+    private LinkedList<Question> questions = new LinkedList<>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        createQuizViewModel = ViewModelProviders.of(this).get(CreateQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_create_quiz, container, false);
 
         correctAnswerOne = root.findViewById(R.id.correct_answer_input);
@@ -54,6 +52,7 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         addWrongAnswer.setOnClickListener(this);
         nextQuestion.setOnClickListener(this);
         finishCreating.setOnClickListener(this);
+        finishCreating.setClickable(false);
 
         return root;
     }
@@ -63,15 +62,25 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.blink_anim);
         if (v == nextQuestion) {
             v.startAnimation(animation);
-            //TODO: save the question with the corresponding alternatives and reload the fragment to create the next question
+            if (question.getText().toString().equals("") || correctAnswerOne.getText().toString().equals("") ||
+                    wrongAnswerOne.getText().toString().equals("")) {
+                Toast.makeText(getContext(), "Please fill the question field and at least one correct and one wrong answer", Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                int size = questions.size() + 1;
+                Question questionObject = new Question(size, question.getText().toString(), correctAnswerOne.getText().toString(),
+                        correctAnswerTwo.getText().toString(), wrongAnswerOne.getText().toString(), wrongAnswerTwo.getText().toString(),
+                        wrongAnswerThree.getText().toString(), wrongAnswerFour.getText().toString(), questions);
+                questions.add(questionObject);
+                size++;
+                restoreIntent();
+                questionNumber.setText("Question: " + size);
+                if (Question.getQuestions().size() > 0) {
+                    finishCreating.setClickable(true);
+                }
 
-
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            if (Build.VERSION.SDK_INT >= 26) {
-                ft.setReorderingAllowed(false);
             }
-            ft.detach(this).attach(this).commit();
-            return;
+
         }
         if (v == addCorrectAnswer) {
             addCorrectAnswer.setVisibility(View.INVISIBLE);
@@ -100,4 +109,28 @@ public class CreateQuizFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public void restoreIntent() {
+        question.setText("");
+        correctAnswerOne.setText("");
+        correctAnswerTwo.setText("");
+        wrongAnswerOne.setText("");
+        wrongAnswerTwo.setText("");
+        wrongAnswerThree.setText("");
+        wrongAnswerFour.setText("");
+        addCorrectAnswer.setVisibility(View.VISIBLE);
+        addCorrectAnswerText.setVisibility(View.VISIBLE);
+        addWrongAnswer.setVisibility(View.VISIBLE);
+        addWrongAnswerText.setVisibility(View.VISIBLE);
+        correctAnswerTwo.setVisibility(View.INVISIBLE);
+        wrongAnswerFour.setVisibility(View.INVISIBLE);
+    }
+
 }
+
+
+    /*  FragmentTransaction ft = getFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(this).attach(this).commit();*/

@@ -19,13 +19,11 @@ import java.util.LinkedList;
 
 public class MyQuizzesFragment extends Fragment {
 
-    private MyQuizzesViewModel myQuizzesViewModel;
     private LinkedList<MyQuizzes> myQuizzes;
     private TextView textStatus;
     private RecyclerView recyclerView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myQuizzesViewModel = ViewModelProviders.of(this).get(MyQuizzesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_my_quizzes, container, false);
 
         textStatus = root.findViewById(R.id.text_status_my_quizzes);

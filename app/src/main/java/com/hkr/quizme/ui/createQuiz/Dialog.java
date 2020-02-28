@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
 
-import java.util.LinkedList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -29,7 +27,6 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     public RecyclerView recyclerView;
     private CreateQuizAdapter createQuizAdapter;
     private Button createQuizAfterReviewBtn;
-    private LinkedList<Question> questions;
     private int i = 0;
 
 
@@ -42,7 +39,7 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         createQuizAfterReviewBtn = view.findViewById(R.id.create_quiz_after_review);
         createQuizAfterReviewBtn.setOnClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        createQuizAdapter = new CreateQuizAdapter(this.getContext(), bringQuestions());
+        createQuizAdapter = new CreateQuizAdapter(this.getContext(), Question.getQuestions());
         recyclerView.setAdapter(createQuizAdapter);
 
         return view;
@@ -52,12 +49,12 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (i > 0) {
-            createQuizAdapter = new CreateQuizAdapter(this.getContext(), questions);
+            createQuizAdapter = new CreateQuizAdapter(this.getContext(), Question.getQuestions());
             recyclerView.setAdapter(createQuizAdapter);
         }
         i = 1;
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        getDialog().setCancelable(false);
+        getDialog().setCancelable(true);
         WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
         params.width = 900;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
@@ -68,25 +65,29 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.blink_anim);
-
         if (v == createQuizAfterReviewBtn) {
             v.startAnimation(animation);
-            //Todo: save the created quiz to the database
-            Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
+            if (Question.getQuestions().size() == 0) {
+                Toast.makeText(getContext(), "Unable to create quiz since you did not add any question", Toast.LENGTH_LONG).show();
+                getDialog().dismiss();
+
+            } else {
+                Question.getQuestions().clear();
+                Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
+                //Todo: save the created quiz to the database. ALl the created question are saved inside
+                // Question.getQuestions();
+                // Every Question contains of number, questionTitle, two correct answers and four wrong answers
+                // Loop the linkedlist Question.getQuestions and save every question in DB;
+
+            }
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
         }
     }
 
-    public LinkedList<Question> bringQuestions() {
-        questions = new LinkedList<>();
-        //TODO: Bring all the created questions by the user and add them to the question linkedlist
-        for (int i = 1; i < 10; i++) {
-            questions.add(new Question(i, i + ": The time factor when determining the efficiency of algorithm is measured by",
-                    "Counting the number of key operations", "",
-                    "Counting microseconds", "Counting the number of statements",
-                    "Counting the kilobytes of algorithm", "Counting the kilobytes of algorithm"));
-        }
-        return questions;
+    public void not(int p) {
+        createQuizAdapter = new CreateQuizAdapter(this.getContext(), Question.getQuestions());
+        recyclerView.setAdapter(createQuizAdapter);
     }
+
 }

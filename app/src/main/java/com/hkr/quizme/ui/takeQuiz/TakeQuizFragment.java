@@ -29,8 +29,6 @@ public class TakeQuizFragment extends Fragment  {
     private List<Parent> parents;
     private TextView statusTextView;
 
-    private TakeQuizViewModel takeQuizViewModel;
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -38,7 +36,6 @@ public class TakeQuizFragment extends Fragment  {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        takeQuizViewModel = ViewModelProviders.of(this).get(TakeQuizViewModel.class);
         View root = inflater.inflate(R.layout.fragment_take_quiz, container, false);
         statusTextView = root.findViewById(R.id.text_status);
         recyclerView = root.findViewById(R.id.recycleview_choose_quiz);

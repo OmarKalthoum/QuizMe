@@ -138,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Question 5"
+        android:text="Question 1"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/question_input"

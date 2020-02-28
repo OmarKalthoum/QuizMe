@@ -1,14 +1,10 @@
 package com.hkr.quizme.ui.chooseQuiz;
 
-import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hkr.quizme.QuizActivity;
 import com.hkr.quizme.R;
-import com.hkr.quizme.global_data.QuizHolder;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

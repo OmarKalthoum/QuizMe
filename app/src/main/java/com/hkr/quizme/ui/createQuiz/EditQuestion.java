@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.hkr.quizme.R;
 
-import androidx.appcompat.app.AppCompatActivity;
+import java.util.LinkedList;
 
-import static com.hkr.quizme.ui.createQuiz.CreateQuizAdapter.questions;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class EditQuestion extends AppCompatActivity {
     private Button done;
     private TextView questionNumber;
     private EditText question, correctAnswerOne, correctAnswerTwo, wrongAnswerOne, wrongAnswerTwo, wrongAnswerThree, wrongAnswerFour;
+    LinkedList<Question> questions = Question.getQuestions();
 
 
     @Override
@@ -35,29 +36,30 @@ public class EditQuestion extends AppCompatActivity {
         wrongAnswerThree = findViewById(R.id.wrong_answer_three);
         wrongAnswerFour = findViewById(R.id.wrong_answer_four);
         questionNumber = findViewById(R.id.question_amount);
+
         done = findViewById(R.id.done);
+        final int pos = getIntent().getIntExtra("position", 0);
 
-
-        question.setText(getIntent().getStringExtra("question"));
-        correctAnswerOne.setText(getIntent().getStringExtra("correctAnswerOne"));
-        correctAnswerTwo.setText(getIntent().getStringExtra("correctAnswerTwo"));
-        wrongAnswerOne.setText(getIntent().getStringExtra("wrongAnswerOne"));
-        wrongAnswerTwo.setText(getIntent().getStringExtra("wrongAnswerTwo"));
-        wrongAnswerThree.setText(getIntent().getStringExtra("wrongAnswerThree"));
-        wrongAnswerFour.setText(getIntent().getStringExtra("wrongAnswerFour"));
-
+        question.setText(questions.get(pos).getQuestion());
+        correctAnswerOne.setText(questions.get(pos).getCorrectAnswerOne());
+        correctAnswerTwo.setText(questions.get(pos).getCorrectAnswerTwo());
+        wrongAnswerOne.setText(questions.get(pos).getWrongAnswerOne());
+        wrongAnswerTwo.setText(questions.get(pos).getWrongAnswerTwo());
+        wrongAnswerThree.setText(questions.get(pos).getWrongAnswerThree());
+        wrongAnswerFour.setText(questions.get(pos).getWrongAnswerFour());
+        questionNumber.setText("Question: " + questions.get(pos).getQuestionNumber());
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 view.startAnimation(animation);
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setQuestion(question.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setCorrectAnswerOne(correctAnswerOne.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setCorrectAnswerTwo(correctAnswerTwo.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerOne(wrongAnswerOne.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerTwo(wrongAnswerTwo.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerThree(wrongAnswerThree.getText().toString());
-                questions.get(Integer.parseInt(getIntent().getStringExtra("position"))).setWrongAnswerFour(wrongAnswerFour.getText().toString());
+                questions.get(pos).setQuestion(question.getText().toString());
+                questions.get(pos).setCorrectAnswerOne(correctAnswerOne.getText().toString());
+                questions.get(pos).setCorrectAnswerTwo(correctAnswerTwo.getText().toString());
+                questions.get(pos).setWrongAnswerOne(wrongAnswerOne.getText().toString());
+                questions.get(pos).setWrongAnswerTwo(wrongAnswerTwo.getText().toString());
+                questions.get(pos).setWrongAnswerThree(wrongAnswerThree.getText().toString());
+                questions.get(pos).setWrongAnswerFour(wrongAnswerFour.getText().toString());
                 finish();
             }
         });
