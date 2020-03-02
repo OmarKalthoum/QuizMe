@@ -84,7 +84,6 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
             }).start();
         } else {
             resultComment.setText("KEEP TRYING " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
-
         }
 
         int newPoints = CurrentUser.getInstance().getUser().getPoints() + QuizHolder.getInstance().getPoints();
