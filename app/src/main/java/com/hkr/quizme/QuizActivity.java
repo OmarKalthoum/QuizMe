@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hkr.quizme.database_utils.entities.Answer;
 import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.ui.chooseQuiz.ChooseQuiz;
@@ -21,6 +22,8 @@ import com.hkr.quizme.timers.UpdatingTimer;
 import com.hkr.quizme.timers.TimerListener;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.List;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener, TimerListener {
     private final int TIME_TO_ANSWER = 20;
@@ -54,10 +57,23 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         totalQuestions.setText(String.format("%d/%d", QuizHolder.getInstance().getCurrentQuestion() + 1, QuizHolder.getInstance().getMaxPoints()));
 
         question.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getQuestion());
+        List<Answer> answers = QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers();
         button1.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(0).getAnswer());
         button2.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(1).getAnswer());
-        button3.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(2).getAnswer());
-        button4.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(3).getAnswer());
+        if (answers.size() >= 3) {
+            button3.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(2).getAnswer());
+            if (answers.size() == 4) {
+                button4.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers().get(3).getAnswer());
+            } else {
+                button4.setVisibility(View.INVISIBLE);
+                button4.setClickable(false);
+            }
+        } else {
+            button3.setVisibility(View.INVISIBLE);
+            button3.setClickable(false);
+            button4.setVisibility(View.INVISIBLE);
+            button4.setClickable(false);
+        }
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
