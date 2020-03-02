@@ -1,6 +1,8 @@
 package com.hkr.quizme;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -9,6 +11,11 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.hkr.quizme.global_data.CurrentUser;
 import com.hkr.quizme.utils.Rankings;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -44,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
             if (CurrentUser.getInstance().getUser().getImage() != null) {
                 Glide.with(this).load(CurrentUser.getInstance().getUser().getImage()).into(profilPic);
             }
+          /*  if (getIntent().getStringExtra("normalLogIN").equals("yes")) {
+                String imagePath = getProfileImagePath();
+                if (imagePath != null) {
+                    profilPic.setImageURI(Uri.parse(imagePath));
+                }
+            }*/
             userName.setText(CurrentUser.getInstance().getUser().getFirstName() + " " + CurrentUser.getInstance().getUser().getLastName());
             Rankings rankings = new Rankings();
             rankTextView.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
@@ -83,6 +96,24 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
         }
+    }
+
+    public String getProfileImagePath() {
+        String path = null;
+        File myFile = new File(Environment.getExternalStorageDirectory(), "profImage.txt");
+        if (myFile.exists()) {
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(myFile));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    path = line;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return path;
     }
 
 }

@@ -1,7 +1,11 @@
 package com.hkr.quizme;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -28,6 +31,8 @@ import com.hkr.quizme.global_data.CurrentUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -84,6 +89,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
             }
             CurrentUser.getInstance().setUser(user);
             Intent f = new Intent(this, MainActivity.class);
+            f.putExtra("normalLogIN", "yes");
             startActivity(f);
         }
         if (v == signUpBtn) {
@@ -161,6 +167,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                     String profileImage = "https://graph.facebook.com/" + object.getString("id") + "/picture?type=large&redirect=true&width=600&height=600";
                     user.setImage(profileImage);
                     Intent mainIntent = new Intent(logInBtn.getContext(), MainActivity.class);
+
                     startActivity(mainIntent);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -172,4 +179,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         request.setParameters(parameters);
         request.executeAsync();
     }
+
+
+
 }

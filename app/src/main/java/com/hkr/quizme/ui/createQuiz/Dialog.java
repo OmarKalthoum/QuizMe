@@ -1,5 +1,7 @@
 package com.hkr.quizme.ui.createQuiz;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -11,10 +13,14 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +34,10 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     private CreateQuizAdapter createQuizAdapter;
     private Button createQuizAfterReviewBtn;
     private int i = 0;
+    private int index = -1;
+    private int indexTwo = -1;
+    private Button courseBtn, subjectBtn, submitBtn, caneclBtn;
+    private boolean checkCoursePicked = false;
 
 
     @Nullable
@@ -73,21 +83,123 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
 
             } else {
                 Question.getQuestions().clear();
-                Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
+                getQuizInfo();
+
+
+            }
+
+        }
+    }
+
+    private void getQuizInfo() {
+        final android.app.Dialog dialog = new android.app.Dialog(getContext());
+        dialog.setContentView(R.layout.create_quiz_parent_alert_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(false);
+
+        courseBtn = dialog.findViewById(R.id.course_btn);
+        subjectBtn = dialog.findViewById(R.id.subject_btn);
+        submitBtn = dialog.findViewById(R.id.submitBtn);
+        caneclBtn = dialog.findViewById(R.id.cancelBtn);
+        final EditText quizName = dialog.findViewById(R.id.quiz_name);
+
+
+        courseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickCourseDialog();
+            }
+        });
+
+        subjectBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!checkCoursePicked) {
+                    Toast.makeText(getContext(), "You have to choose a course first", Toast.LENGTH_LONG).show();
+                } else {
+                    pickSubjectDialog();
+                }
+
+            }
+        });
+
+        caneclBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //TODO: Check that all the needed info are submited
+
                 //Todo: save the created quiz to the database. ALl the created question are saved inside
                 // Question.getQuestions();
                 // Every Question contains of number, questionTitle, two correct answers and four wrong answers
                 // Loop the linkedlist Question.getQuestions and save every question in DB;
 
+                Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                startActivity(intent);
             }
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
-        }
+        });
+
+        dialog.show();
     }
 
-    public void not(int p) {
-        createQuizAdapter = new CreateQuizAdapter(this.getContext(), Question.getQuestions());
-        recyclerView.setAdapter(createQuizAdapter);
+
+    public void pickCourseDialog() {
+        final String[] courses = {"5", "4", "3", "2", "1"};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+
+        builder.setTitle("Pick a Course");
+
+        builder.setSingleChoiceItems(courses, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                index = which;
+            }
+        });
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (index != -1) {
+                    courseBtn.setText(courses[index]);
+                    checkCoursePicked = true;
+                }
+            }
+        });
+
+        builder.show();
     }
+
+    public void pickSubjectDialog() {
+        final String[] subjects = {"5", "4", "3", "2", "1"};
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+        builder.setTitle("Pick a Subject");
+
+        builder.setSingleChoiceItems(subjects, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                indexTwo = which;
+            }
+        });
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (indexTwo != -1) {
+                    subjectBtn.setText(subjects[indexTwo]);
+                }
+            }
+        });
+        builder.show();
+    }
+
 
 }

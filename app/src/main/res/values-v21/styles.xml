@@ -6,4 +6,10 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorBackground">@drawable/rounded_alert_dialog</item>
+
+    </style>
+
+
 </resources>
