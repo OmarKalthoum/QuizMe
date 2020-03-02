@@ -2,6 +2,8 @@ package com.hkr.quizme.database_utils;
 
 import android.util.Log;
 
+import com.hkr.quizme.database_utils.entities.Answer;
+import com.hkr.quizme.database_utils.entities.Question;
 import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.database_utils.entities.QuizRating;
 import com.hkr.quizme.global_data.CurrentUser;
@@ -26,7 +28,36 @@ public class QuizDAO implements DAO<Quiz> {
 
     @Override
     public boolean insert(Quiz object) {
-        return false;
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("name", object.getName());
+            JSONArray questions = new JSONArray();
+            for (Question q : object.getQuestions()) {
+                JSONObject question = new JSONObject();
+                question.put("question", q.getQuestion());
+                JSONArray incorrectAnswers = new JSONArray();
+                JSONArray correctAnswers = new JSONArray();
+                for (Answer a : q.getAnswers()) {
+                    JSONObject answer = new JSONObject();
+                    answer.put("answer", a.getAnswer());
+                    if (a.isCorrect()) {
+                        correctAnswers.put(answer);
+                    } else {
+                        incorrectAnswers.put(answer);
+                    }
+                }
+                question.put("incorrectAnswers", incorrectAnswers);
+                question.put("correctAnswers", correctAnswers);
+                questions.put(question);
+            }
+            params.put("questions", questions);
+            JSONObject response = communicator.apiCallForResponse("/create-quiz", "POST", params);
+
+        } catch (JSONException exception) {
+            Log.e("QuizDAO::", exception.toString());
+        }
+        return true;
     }
 
     public List<Quiz> getQuizzesInSubject(int subjectId) {

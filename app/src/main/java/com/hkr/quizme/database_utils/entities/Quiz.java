@@ -19,6 +19,11 @@ public class Quiz {
         questions = new ArrayList<>();
     }
 
+    public Quiz(String name) {
+        this.name = name;
+        questions = new ArrayList<>();
+    }
+
     public Quiz(int id, String name) {
         this.id = id;
         this.name = name;
@@ -65,6 +70,15 @@ public class Quiz {
         }
     }
 
+    public boolean insert() {
+        try {
+            return new InsertTask().execute(this).get();
+        } catch (ExecutionException | InterruptedException exception) {
+            Log.e("Quiz::", exception.toString());
+            return false;
+        }
+    }
+
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
@@ -88,6 +102,14 @@ public class Quiz {
         @Override
         protected Double doInBackground(Quiz... quizzes) {
             return new QuizDAO().getRating(quizzes[0]);
+        }
+    }
+
+    private static class InsertTask extends AsyncTask<Quiz, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Quiz... quizzes) {
+            QuizDAO dao = new QuizDAO();
+            return dao.insert(quizzes[0]);
         }
     }
 }
