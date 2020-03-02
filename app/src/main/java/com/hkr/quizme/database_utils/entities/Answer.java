@@ -20,6 +20,10 @@ public class Answer {
         this.answer = answer;
     }
 
+    public Answer(boolean correct, String answer) {
+        this.correct = correct;
+        this.answer = answer;
+    }
 
     public boolean isCorrect() {
         return correct;
@@ -27,39 +31,5 @@ public class Answer {
 
     public String getAnswer() {
         return answer;
-    }
-
-    public static List<Answer> getIncorrectAnswers(int questionId) {
-        try {
-            return new GetIncorrectAnswersTask().execute(questionId).get();
-        } catch (ExecutionException | InterruptedException exception) {
-            Log.d("ANSWER::", exception.toString());
-        }
-        return new ArrayList<>();
-    }
-
-    public static Answer getCorrectAnswer(int questionId) {
-        try {
-            return new GetCorrectAnswerTask().execute(questionId).get();
-        } catch (ExecutionException | InterruptedException exception) {
-            Log.d("ANSWER::", exception.toString());
-        }
-        return null;
-    }
-
-    private static class GetIncorrectAnswersTask extends AsyncTask<Integer, Void, List<Answer>> {
-        @Override
-        protected List<Answer> doInBackground(Integer... integers) {
-            AnswerDAO dao = new AnswerDAO();
-            return dao.getIncorrectAnswers(integers[0]);
-        }
-    }
-
-    private static class GetCorrectAnswerTask extends AsyncTask<Integer, Void, Answer> {
-        @Override
-        protected Answer doInBackground(Integer... integers) {
-            AnswerDAO dao = new AnswerDAO();
-            return dao.getCorrectAnswer(integers[0]);
-        }
     }
 }

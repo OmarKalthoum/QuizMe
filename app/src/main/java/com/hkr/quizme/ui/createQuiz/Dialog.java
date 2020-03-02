@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
+import com.hkr.quizme.database_utils.entities.Answer;
+import com.hkr.quizme.database_utils.entities.Quiz;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -72,13 +75,30 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                 getDialog().dismiss();
 
             } else {
+                Quiz quiz = new Quiz("placeholder");
+                for (Question q : Question.getQuestions()) {
+                    com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
+                    if (!q.getWrongAnswerFour().equals("")) {
+                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
+                    }
+                    dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
+                    if (!q.getCorrectAnswerTwo().equals("")) {
+                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
+                    }
+                    quiz.getQuestions().add(dbQuestion);
+                    Log.d("Dialog::", quiz.getQuestions().get(0).getQuestion());
+                }
+                quiz.insert();
+
                 Question.getQuestions().clear();
                 Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
                 //Todo: save the created quiz to the database. ALl the created question are saved inside
                 // Question.getQuestions();
                 // Every Question contains of number, questionTitle, two correct answers and four wrong answers
                 // Loop the linkedlist Question.getQuestions and save every question in DB;
-
             }
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);

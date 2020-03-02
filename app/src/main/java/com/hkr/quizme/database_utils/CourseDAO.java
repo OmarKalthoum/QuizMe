@@ -65,6 +65,6 @@ public class CourseDAO implements DAO<Course> {
         } catch (JSONException exception) {
             Log.d("JSON::", exception.toString());
         }
-        return null; // TODO: fucking dont do this
+        return null;
     }
 }

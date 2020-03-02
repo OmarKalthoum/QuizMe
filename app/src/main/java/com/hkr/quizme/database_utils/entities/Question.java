@@ -21,6 +21,11 @@ public class Question {
         this.answers = new ArrayList<>();
     }
 
+    public Question(String question) {
+        this.question = question;
+        this.answers = new ArrayList<>();
+    }
+
     public int getId() {
         return id;
     }
