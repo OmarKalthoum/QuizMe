@@ -1,10 +1,12 @@
 package com.hkr.quizme.ui.takeQuiz;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,13 +23,15 @@ import com.hkr.quizme.database_utils.tasks.GetCoursesTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-public class TakeQuizFragment extends Fragment  {
+public class TakeQuizFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private List<Parent> parents;
     private TextView statusTextView;
+    private LinearLayout linearLayout;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -67,6 +71,7 @@ public class TakeQuizFragment extends Fragment  {
         } catch (InterruptedException | ExecutionException exception) {
             Log.d("DB:::::", exception.toString());
         }
+
         return parentObjects;
     }
 

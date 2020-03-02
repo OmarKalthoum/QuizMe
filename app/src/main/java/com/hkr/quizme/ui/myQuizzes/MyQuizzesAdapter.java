@@ -1,9 +1,7 @@
 package com.hkr.quizme.ui.myQuizzes;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 import com.hkr.quizme.R;
 
 import java.util.LinkedList;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,14 +42,14 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyQuizzesHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyQuizzesHolder holder, final int position) {
         holder.title.setText(myQuizzes.get(position).getTitle());
-        holder.rating.setText(holder.rating.getText() + myQuizzes.get(position).getRating());
+        holder.rating.setText(myQuizzes.get(position).getRating());
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.startAnimation(animation);
-                alertDialog();
+                alertDialog(position);
 
             }
         });
@@ -63,7 +60,7 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
         return myQuizzes.size();
     }
 
-    public void alertDialog() {
+    public void alertDialog(final int pos) {
         final Dialog warningDialog = new Dialog(context);
         warningDialog.setContentView(R.layout.warning_alert_dialog);
         warningDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -86,6 +83,8 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
             public void onClick(View v) {
                 //TODO:::: reomve the chosen quiz
                 Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
+                myQuizzes.remove(pos);
+                notifyDataSetChanged();
                 warningDialog.dismiss();
             }
         });

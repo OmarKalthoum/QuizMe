@@ -3,35 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_gallery">
+    app:startDestination="@+id/nav_take_quiz">
 
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_take_quiz"
         android:name="com.hkr.quizme.ui.takeQuiz.TakeQuizFragment"
         android:label="@string/menu_take_quiz"
         tools:layout="@layout/fragment_take_quiz" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_create_quiz"
         android:name="com.hkr.quizme.ui.createQuiz.CreateQuizFragment"
         android:label="@string/menu_create_quiz"
         tools:layout="@layout/fragment_create_quiz" />
 
     <fragment
-        android:id="@+id/nav_tools"
+        android:id="@+id/nav_my_quizzes"
         android:name="com.hkr.quizme.ui.myQuizzes.MyQuizzesFragment"
         android:label="@string/menu_my_quizzes"
         tools:layout="@layout/fragment_my_quizzes" />
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_prev_result"
         android:name="com.hkr.quizme.ui.previousResult.PrevResultFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_prev_result" />
 
     <fragment
-        android:id="@+id/nav_share"
+        android:id="@+id/nav_about_us"
         android:name="com.hkr.quizme.ui.aboutUs.AboutUsFragment"
         android:label="@string/menu_share"
         tools:layout="@layout/fragment_about_us" />

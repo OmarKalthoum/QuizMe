@@ -54,7 +54,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (counterProgressResult <= QuizHolder.getInstance().getResultPercentage()) {
+                    while (counterProgressResult != QuizHolder.getInstance().getResultPercentage()) {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -102,7 +102,13 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == menuBtn) {
-            showRatingDialog();
+            Rankings rankings = new Rankings();
+            String ran = rankings.getRanking(CurrentUser.getInstance().getUser()).getName();
+            if (ran.equalsIgnoreCase("noob")) {
+                moveToMain();
+            } else {
+                showRatingDialog();
+            }
         }
         if (v == reportBtn) {
             showFeedbackDialog();
@@ -226,11 +232,10 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     public void moveToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
     }
 
     public void saveRatingToDB() {
-        //TODO: save the rating to database if it is not 0 before returning to the main menu
         QuizHolder.getInstance().getQuiz().rate(CurrentUser.getInstance().getUser().getId(), rating);
+        Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
     }
 }

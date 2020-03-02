@@ -7,9 +7,22 @@
     </style>
 
     <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:colorBackground">@drawable/rounded_alert_dialog</item>
-
+        <item name="android:windowBackground">@drawable/rounded_alert_dialog</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColor">#ffffff</item>
     </style>
 
+    <array name="myImages">
+        <item>@drawable/a</item>
+        <item>@drawable/b</item>
+        <item>@drawable/d</item>
+        <item>@drawable/cage_two</item>
+        <item>@drawable/f</item>
+        <item>@drawable/l</item>
+        <item>@drawable/e</item>
+        <item>@drawable/k</item>
+        <item>@drawable/n</item>
+        <item>@drawable/o</item>
+    </array>
 
 </resources>

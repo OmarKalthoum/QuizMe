@@ -30,10 +30,6 @@ public class ParentCreator {
                 item.setChildObjectList(subjects);
                 parents.add(item);
             }
-            /*for (int i = 1; i < 10; i++) {
-                Parent item = new Parent("Algorithm and Data Structure " + (i + 1));
-                parents.add(item);
-            }*/
         } catch (Exception exception) {
             Log.d("DB:::::", "Fuck.");
         }

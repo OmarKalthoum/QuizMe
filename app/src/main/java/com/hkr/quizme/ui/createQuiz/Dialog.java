@@ -15,7 +15,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hkr.quizme.MainActivity;
@@ -23,9 +22,7 @@ import com.hkr.quizme.R;
 import com.hkr.quizme.database_utils.entities.Answer;
 import com.hkr.quizme.database_utils.entities.Course;
 import com.hkr.quizme.database_utils.entities.Quiz;
-import com.hkr.quizme.database_utils.tasks.GetCoursesTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -137,35 +134,33 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO: Check that all the needed info are submited
-
-                //Todo: save the created quiz to the database. ALl the created question are saved inside
-                // Question.getQuestions();
-                // Every Question contains of number, questionTitle, two correct answers and four wrong answers
-                // Loop the linkedlist Question.getQuestions and save every question in DB;
-                Quiz quiz = new Quiz(quizName.getText().toString());
-                quiz.setSubjectId(courses.get(index).getSubjects().get(indexTwo).getId());
-                for (Question q : Question.getQuestions()) {
-                    com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
-                    if (!q.getWrongAnswerFour().equals("")) {
-                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
+                if (courseBtn.getText().equals("Belongs to course?") || subjectBtn.getText().equals("Belongs to subject?") || quizName.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "You have to indicate all the requirements fields to be able to submit you quiz", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    Quiz quiz = new Quiz(quizName.getText().toString());
+                    quiz.setSubjectId(courses.get(index).getSubjects().get(indexTwo).getId());
+                    for (Question q : Question.getQuestions()) {
+                        com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
+                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
+                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
+                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
+                        if (!q.getWrongAnswerFour().equals("")) {
+                            dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
+                        }
+                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
+                        if (!q.getCorrectAnswerTwo().equals("")) {
+                            dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
+                        }
+                        quiz.getQuestions().add(dbQuestion);
+                        Log.d("Dialog::", quiz.getQuestions().get(0).getQuestion());
                     }
-                    dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
-                    if (!q.getCorrectAnswerTwo().equals("")) {
-                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
-                    }
-                    quiz.getQuestions().add(dbQuestion);
-                    Log.d("Dialog::", quiz.getQuestions().get(0).getQuestion());
+                    quiz.insert();
+                    Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    Question.getQuestions().clear();
+                    startActivity(intent);
                 }
-                quiz.insert();
-                Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                Question.getQuestions().clear();
-                startActivity(intent);
             }
         });
 
@@ -179,16 +174,13 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
             courseStrings[i] = courses.get(i).getName();
         }
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
-
         builder.setTitle("Pick a Course");
-
         builder.setSingleChoiceItems(courseStrings, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 index = which;
             }
         });
-
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -198,7 +190,6 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                 }
             }
         });
-
         builder.show();
     }
 
@@ -207,7 +198,6 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
         for (int i = 0; i < subjects.length; i++) {
             subjects[i] = courses.get(index).getSubjects().get(i).getName();
         }
-
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
         builder.setTitle("Pick a Subject");
 

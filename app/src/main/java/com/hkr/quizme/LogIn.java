@@ -1,11 +1,7 @@
 package com.hkr.quizme;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
@@ -32,8 +28,6 @@ import com.hkr.quizme.global_data.CurrentUser;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,6 +44,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     private ImageView logoBtn;
     private LoginButton logInWithFB;
     private CallbackManager callbackManager;
+    private static int backCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,6 +175,15 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         request.executeAsync();
     }
 
+    @Override
+    public void onBackPressed() {
+        backCounter++;
+        if (backCounter >= 2) {
+            backCounter = 0;
+            this.finishAffinity();
+        } else {
 
+        }
+    }
 
 }

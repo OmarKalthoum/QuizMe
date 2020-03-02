@@ -1,8 +1,11 @@
 package com.hkr.quizme;
 
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,10 +15,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.hkr.quizme.global_data.CurrentUser;
 import com.hkr.quizme.utils.Rankings;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -47,19 +48,21 @@ public class MainActivity extends AppCompatActivity {
         levelBarMain = findViewById(R.id.levelBarMain);
 
         if (CurrentUser.getInstance().getUser() != null) {
-            // String imageURL = getIntent().getStringExtra("profileImage");
             if (CurrentUser.getInstance().getUser().getImage() != null) {
                 Glide.with(this).load(CurrentUser.getInstance().getUser().getImage()).into(profilPic);
+            } else if (Objects.equals(getIntent().getStringExtra("normalLogIN"), "yes")) {
+                //  getProfileImagePath();   //DOESNT WORK
             }
-          /*  if (getIntent().getStringExtra("normalLogIN").equals("yes")) {
-                String imagePath = getProfileImagePath();
-                if (imagePath != null) {
-                    profilPic.setImageURI(Uri.parse(imagePath));
-                }
-            }*/
             userName.setText(CurrentUser.getInstance().getUser().getFirstName() + " " + CurrentUser.getInstance().getUser().getLastName());
             Rankings rankings = new Rankings();
-            rankTextView.setText(rankings.getRanking(CurrentUser.getInstance().getUser()).getName());
+            String ran = rankings.getRanking(CurrentUser.getInstance().getUser()).getName();
+            rankTextView.setText(ran);
+            if (ran.equalsIgnoreCase("noob") /*|| ran.equalsIgnoreCase("rookie")*/) {
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                Menu menuNav = navigationView.getMenu();
+                MenuItem createQuizBtn = menuNav.findItem(R.id.nav_create_quiz);
+                createQuizBtn.setEnabled(false);
+            }
             levelBarMain.setProgress(rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
             levelInDigits.setText(rankings.getProgressPercent(CurrentUser.getInstance().getUser()) + "%");
             System.out.println("RANKING:" + rankings.getProgressPercent(CurrentUser.getInstance().getUser()));
@@ -67,11 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,
-                R.id.nav_tools, R.id.nav_share)
+                R.id.nav_prev_result, R.id.nav_take_quiz, R.id.nav_create_quiz,
+                R.id.nav_my_quizzes, R.id.nav_about_us)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -98,22 +99,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public String getProfileImagePath() {
-        String path = null;
-        File myFile = new File(Environment.getExternalStorageDirectory(), "profImage.txt");
-        if (myFile.exists()) {
-            try {
-                BufferedReader br = new BufferedReader(new FileReader(myFile));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    path = line;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void getProfileImagePath() {
+        String path = Environment.getExternalStorageDirectory().toString();
+        File imgFile = new File(path, "image.jpg");
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            profilPic.setImageBitmap(myBitmap);
         }
 
-        return path;
     }
-
 }

@@ -29,9 +29,11 @@ import com.hkr.quizme.database_utils.entities.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import static com.hkr.quizme.LogIn.playQuizMeSound;
@@ -73,9 +75,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             if (user.checkUniqueEmail(this) && user.register()) {
                 Toast.makeText(this, "Registration was successful!", Toast.LENGTH_LONG).show();
                 Intent logInIntent = new Intent(this, LogIn.class);
-                if (imageLink != null) {
-                    saveImageToTextFile();
-                }
+             /*   if (imageLink != null) {
+                    try {
+                        saveImageToTextFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }*/
                 startActivity(logInIntent);
             }
         }
@@ -104,7 +110,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         if (resultCode == RESULT_OK) {
             Uri photoUri = data.getData();
             imageLink = photoUri;
-
             if (photoUri != null) {
                 try {
                     addProfilePic.setImageBitmap(getCorrectlyOrientedImage(this, photoUri));
@@ -174,30 +179,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         return srcBitmap;
     }
 
+    public void saveImageToTextFile() throws IOException {
+        Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageLink);
+        String path = Environment.getExternalStorageDirectory().toString();
+        OutputStream fOut = null;
+        File file = new File(path, "image.jpg");
+        fOut = new FileOutputStream(file);
 
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-    }
-
-    public void saveImageToTextFile() {
-        File myFile = new File(Environment.getExternalStorageDirectory(), "profImage.txt");
-        try {
-            if (!myFile.exists()) {
-                myFile.createNewFile();
-            }
-            FileOutputStream fOut = new FileOutputStream(myFile);
-            OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut);
-            myOutWriter.append(getPath(imageLink));
-            myOutWriter.close();
-            fOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bitmap.compress(Bitmap.CompressFormat.PNG, 60, fOut);
+        fOut.flush();
+        fOut.close();
 
     }
 

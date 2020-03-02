@@ -6,24 +6,24 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_take_quiz"
             android:icon="@drawable/take_quiz_icon"
             android:title="@string/menu_take_quiz" />
 
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_create_quiz"
             android:icon="@drawable/create_quiz_icon"
             android:title="@string/menu_create_quiz" />
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_my_quizzes"
             android:icon="@drawable/my_quizzes_icon"
             android:title="@string/menu_my_quizzes" />
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_prev_result"
             android:icon="@drawable/history_icon"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_share"
+            android:id="@+id/nav_about_us"
             android:icon="@drawable/people_icon"
             android:title="@string/menu_share" />
 
