@@ -52,7 +52,8 @@ public class QuizDAO implements DAO<Quiz> {
                 questions.put(question);
             }
             params.put("questions", questions);
-            Log.d("QuizDAO::", params.toString());
+            JSONObject response = communicator.apiCallForResponse("/create-quiz", "POST", params);
+
         } catch (JSONException exception) {
             Log.e("QuizDAO::", exception.toString());
         }
