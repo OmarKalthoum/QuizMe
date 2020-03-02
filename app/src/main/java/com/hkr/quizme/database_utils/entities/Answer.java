@@ -20,9 +20,6 @@ public class Answer {
         this.answer = answer;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public boolean isCorrect() {
         return correct;
