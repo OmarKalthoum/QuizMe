@@ -32,6 +32,8 @@ public class QuizDAO implements DAO<Quiz> {
         try {
             JSONObject params = new JSONObject();
             params.put("name", object.getName());
+            params.put("subjectId", object.getSubjectId());
+            params.put("userId", CurrentUser.getInstance().getUser().getId());
             JSONArray questions = new JSONArray();
             for (Question q : object.getQuestions()) {
                 JSONObject question = new JSONObject();
@@ -53,7 +55,7 @@ public class QuizDAO implements DAO<Quiz> {
             }
             params.put("questions", questions);
             JSONObject response = communicator.apiCallForResponse("/create-quiz", "POST", params);
-
+            return response.getBoolean("success");
         } catch (JSONException exception) {
             Log.e("QuizDAO::", exception.toString());
         }

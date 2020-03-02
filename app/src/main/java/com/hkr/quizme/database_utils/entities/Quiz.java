@@ -13,6 +13,7 @@ public class Quiz {
     private int id;
     private String name;
     private List<Question> questions;
+    private int subjectId;
 
     public Quiz(int id) {
         this.id = id;
@@ -36,6 +37,14 @@ public class Quiz {
 
     public String getName() {
         return name;
+    }
+
+    public int getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 
     public static List<Quiz> getQuizzesInSubject(int subjectId) {

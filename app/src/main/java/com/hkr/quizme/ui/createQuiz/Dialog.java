@@ -21,9 +21,12 @@ import android.widget.Toast;
 import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
 import com.hkr.quizme.database_utils.entities.Answer;
+import com.hkr.quizme.database_utils.entities.Course;
 import com.hkr.quizme.database_utils.entities.Quiz;
+import com.hkr.quizme.database_utils.tasks.GetCoursesTask;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +44,7 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     private int indexTwo = -1;
     private Button courseBtn, subjectBtn, submitBtn, caneclBtn;
     private boolean checkCoursePicked = false;
+    private List<Course> courses;
 
 
     @Nullable
@@ -49,6 +53,7 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
 
         View view = inflater.inflate(R.layout.review_quiz_alert_dialog_layout, container, false);
         recyclerView = view.findViewById(R.id.review_recycler_view);
+        courses = Course.getCourses();
         createQuizAfterReviewBtn = view.findViewById(R.id.create_quiz_after_review);
         createQuizAfterReviewBtn.setOnClickListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
@@ -85,30 +90,8 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                 getDialog().dismiss();
 
             } else {
-                Quiz quiz = new Quiz("placeholder");
-                for (Question q : Question.getQuestions()) {
-                    com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
-                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
-                    if (!q.getWrongAnswerFour().equals("")) {
-                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
-                    }
-                    dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
-                    if (!q.getCorrectAnswerTwo().equals("")) {
-                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
-                    }
-                    quiz.getQuestions().add(dbQuestion);
-                    Log.d("Dialog::", quiz.getQuestions().get(0).getQuestion());
-                }
-                quiz.insert();
-
-                Question.getQuestions().clear();
                 getQuizInfo();
-
-
             }
-
         }
     }
 
@@ -161,9 +144,27 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                 // Question.getQuestions();
                 // Every Question contains of number, questionTitle, two correct answers and four wrong answers
                 // Loop the linkedlist Question.getQuestions and save every question in DB;
-
+                Quiz quiz = new Quiz(quizName.getText().toString());
+                quiz.setSubjectId(courses.get(index).getSubjects().get(indexTwo).getId());
+                for (Question q : Question.getQuestions()) {
+                    com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
+                    dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
+                    if (!q.getWrongAnswerFour().equals("")) {
+                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
+                    }
+                    dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
+                    if (!q.getCorrectAnswerTwo().equals("")) {
+                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
+                    }
+                    quiz.getQuestions().add(dbQuestion);
+                    Log.d("Dialog::", quiz.getQuestions().get(0).getQuestion());
+                }
+                quiz.insert();
                 Toast.makeText(getContext(), "Your quiz has been created", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getContext(), MainActivity.class);
+                Question.getQuestions().clear();
                 startActivity(intent);
             }
         });
@@ -173,12 +174,15 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
 
 
     public void pickCourseDialog() {
-        final String[] courses = {"5", "4", "3", "2", "1"};
+        final String[] courseStrings = new String[courses.size()];
+        for (int i = 0; i < courseStrings.length; i++) {
+            courseStrings[i] = courses.get(i).getName();
+        }
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
 
         builder.setTitle("Pick a Course");
 
-        builder.setSingleChoiceItems(courses, -1, new DialogInterface.OnClickListener() {
+        builder.setSingleChoiceItems(courseStrings, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 index = which;
@@ -189,7 +193,7 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (index != -1) {
-                    courseBtn.setText(courses[index]);
+                    courseBtn.setText(courseStrings[index]);
                     checkCoursePicked = true;
                 }
             }
@@ -199,7 +203,10 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
     }
 
     public void pickSubjectDialog() {
-        final String[] subjects = {"5", "4", "3", "2", "1"};
+        final String[] subjects = new String[courses.get(index).getSubjects().size()];
+        for (int i = 0; i < subjects.length; i++) {
+            subjects[i] = courses.get(index).getSubjects().get(i).getName();
+        }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
         builder.setTitle("Pick a Subject");

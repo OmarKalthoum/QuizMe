@@ -1,6 +1,13 @@
 package com.hkr.quizme.database_utils.entities;
 
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.hkr.quizme.database_utils.CourseDAO;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Course {
     private int id;
@@ -39,5 +46,22 @@ public class Course {
 
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
+    }
+
+    public static List<Course> getCourses() {
+        try {
+            return new GetCoursesSimpleTask().execute().get();
+        } catch (ExecutionException | InterruptedException exception) {
+            Log.e("Course::", exception.toString());
+            return new ArrayList<>();
+        }
+    }
+
+    private static class GetCoursesSimpleTask extends AsyncTask<Void, Void, List<Course>> {
+        @Override
+        protected List<Course> doInBackground(Void... voids) {
+            CourseDAO dao  = new CourseDAO();
+            return dao.getCourses();
+        }
     }
 }
