@@ -48,7 +48,7 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyQuizzesHolder holder, final int position) {
         holder.title.setText(myQuizzes.get(position).getName());
-        holder.rating.setText(Double.toString(myQuizzes.get(position).getRating()));
+        holder.rating.setText(Double.toString(myQuizzes.get(position).getRating()) + "/5");
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +84,6 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:::: reomve the chosen quiz
                if ( myQuizzes.get(pos).removeQuiz()) {
                    Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
                    myQuizzes.remove(pos);
