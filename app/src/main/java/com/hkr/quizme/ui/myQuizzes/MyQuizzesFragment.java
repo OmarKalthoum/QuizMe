@@ -13,13 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hkr.quizme.R;
+import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.ui.previousResult.PrevResultAdapter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MyQuizzesFragment extends Fragment {
 
-    private LinkedList<MyQuizzes> myQuizzes;
+    private ArrayList<Quiz> myQuizzes;
     private TextView textStatus;
     private RecyclerView recyclerView;
 
@@ -36,13 +38,9 @@ public class MyQuizzesFragment extends Fragment {
         return root;
     }
 
-    public LinkedList<MyQuizzes> initData() {
+    public ArrayList<Quiz> initData() {
         //TODO:: Get the correct values from the DB
-        myQuizzes = new LinkedList<>();
-        for (int i = 1; i < 10; i++) {
-            myQuizzes.add(new MyQuizzes("Algorithm and data structure", "10/1" + i));
-        }
-
+        myQuizzes = Quiz.getUserQuizzes();
         return myQuizzes;
     }
 }

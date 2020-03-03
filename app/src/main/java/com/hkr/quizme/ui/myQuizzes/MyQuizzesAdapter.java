@@ -1,5 +1,6 @@
 package com.hkr.quizme.ui.myQuizzes;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -14,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hkr.quizme.R;
+import com.hkr.quizme.database_utils.entities.Quiz;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import androidx.annotation.NonNull;
@@ -23,11 +26,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
 
     private Context context;
-    private LinkedList<MyQuizzes> myQuizzes;
+    private ArrayList<Quiz> myQuizzes;
     private Animation animation;
 
 
-    public MyQuizzesAdapter(Context context, LinkedList<MyQuizzes> myQuizzes) {
+    public MyQuizzesAdapter(Context context, ArrayList<Quiz> myQuizzes) {
         this.context = context;
         this.myQuizzes = myQuizzes;
         animation = AnimationUtils.loadAnimation(context, R.anim.blink_anim);
@@ -41,16 +44,16 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
         return myQuizzesHolder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyQuizzesHolder holder, final int position) {
-        holder.title.setText(myQuizzes.get(position).getTitle());
-        holder.rating.setText(myQuizzes.get(position).getRating());
+        holder.title.setText(myQuizzes.get(position).getName());
+        holder.rating.setText(Double.toString(myQuizzes.get(position).getRating()));
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.startAnimation(animation);
                 alertDialog(position);
-
             }
         });
     }
@@ -82,9 +85,13 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
             @Override
             public void onClick(View v) {
                 //TODO:::: reomve the chosen quiz
-                Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
-                myQuizzes.remove(pos);
-                notifyDataSetChanged();
+               if ( myQuizzes.get(pos).removeQuiz()) {
+                   Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
+                   myQuizzes.remove(pos);
+                   notifyDataSetChanged();
+               } else {
+                   Toast.makeText(context, "Something went wrong when deleting the quiz...", Toast.LENGTH_LONG).show();
+               }
                 warningDialog.dismiss();
             }
         });

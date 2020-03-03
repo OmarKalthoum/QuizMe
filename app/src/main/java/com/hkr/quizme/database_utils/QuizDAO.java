@@ -6,6 +6,7 @@ import com.hkr.quizme.database_utils.entities.Answer;
 import com.hkr.quizme.database_utils.entities.Question;
 import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.database_utils.entities.QuizRating;
+import com.hkr.quizme.database_utils.entities.User;
 import com.hkr.quizme.global_data.CurrentUser;
 
 import org.json.JSONArray;
@@ -81,6 +82,44 @@ public class QuizDAO implements DAO<Quiz> {
             Log.e("QuizDAO::", exception.toString());
         }
         return result;
+    }
+
+    public ArrayList<Quiz> getUserQuizzes(User user) {
+        APICommunicator communicator = new APICommunicator();
+        ArrayList<Quiz> quizzes = new ArrayList<>();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("userId", user.getId());
+            JSONObject result = communicator.apiCallForResponse("/get-user-quizzes", "POST", params);
+            if (result.getBoolean("success")) {
+                JSONArray jsonQuizzes = result.getJSONArray("quizzes");
+                for (int i = 0; i < jsonQuizzes.length(); i++) {
+                    JSONObject jsonQuiz = jsonQuizzes.getJSONObject(i);
+                    double rating = 0.0;
+                    if (!jsonQuiz.isNull("rating")) {
+                        jsonQuiz.getDouble("rating");
+                    }
+                    Quiz quiz = new Quiz(jsonQuiz.getInt("id"), jsonQuiz.getString("name"), rating);
+                    quizzes.add(quiz);
+                }
+            }
+        } catch (JSONException exception) {
+            Log.e("QuizDAO::", exception.toString());
+        }
+        return quizzes;
+    }
+
+    public boolean removeQuiz(Quiz object) {
+        APICommunicator communicator = new APICommunicator();
+        try {
+            JSONObject params = new JSONObject();
+            params.put("userId", CurrentUser.getInstance().getUser().getId());
+            params.put("quizId", object.getId());
+            return communicator.apiCallForResponse("/remove-quiz", "POST", params).getBoolean("success");
+        } catch (JSONException exception) {
+            Log.e("QuizDAO::", exception.toString());
+        }
+        return false;
     }
 
     public boolean rateQuiz(QuizRating rating) {

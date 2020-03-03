@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.hkr.quizme.database_utils.QuizDAO;
+import com.hkr.quizme.global_data.CurrentUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Quiz {
     private String name;
     private List<Question> questions;
     private int subjectId;
+    private double rating;
 
     public Quiz(int id) {
         this.id = id;
@@ -30,6 +32,21 @@ public class Quiz {
         this.name = name;
         questions = new ArrayList<>();
     }
+
+    public Quiz(int id, String name, double rating) {
+        this.id = id;
+        this.name = name;
+        this.rating = rating;
+        questions = new ArrayList<>();
+    }
+
+    public Quiz(String name, double rating) {
+        this.name = name;
+        this.rating = rating;
+        questions = new ArrayList<>();
+    }
+
+
 
     public int getId() {
         return id;
@@ -92,6 +109,25 @@ public class Quiz {
         this.questions = questions;
     }
 
+    public boolean removeQuiz() {
+        try {
+            return new RemoveQuizTask().execute(this).get();
+        } catch (ExecutionException | InterruptedException exception) {
+            Log.e("Quiz::", exception.toString());
+            return false;
+        }
+    }
+
+    public static ArrayList<Quiz> getUserQuizzes() {
+        ArrayList<Quiz> quizzes = new ArrayList<>();
+        try {
+            quizzes = new GetUserQuizzesTask().execute(CurrentUser.getInstance().getUser()).get();
+        } catch (InterruptedException | ExecutionException exception) {
+            Log.e("Quiz::", exception.toString());
+        }
+        return quizzes;
+    }
+
     private static class QuizzesInSubject extends AsyncTask<Integer, Void, List<Quiz>> {
         @Override
         protected List<Quiz> doInBackground(Integer... integers) {
@@ -119,6 +155,21 @@ public class Quiz {
         protected Boolean doInBackground(Quiz... quizzes) {
             QuizDAO dao = new QuizDAO();
             return dao.insert(quizzes[0]);
+        }
+    }
+
+    private static class GetUserQuizzesTask extends AsyncTask<User, Void, ArrayList<Quiz>> {
+        @Override
+        protected ArrayList<Quiz> doInBackground(User... users) {
+            QuizDAO dao = new QuizDAO();
+            return dao.getUserQuizzes(users[0]);
+        }
+    }
+
+    private static class RemoveQuizTask extends AsyncTask<Quiz, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Quiz... quizzes) {
+            return new QuizDAO().removeQuiz(quizzes[0]);
         }
     }
 }

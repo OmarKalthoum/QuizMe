@@ -142,13 +142,28 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                     quiz.setSubjectId(courses.get(index).getSubjects().get(indexTwo).getId());
                     for (Question q : Question.getQuestions()) {
                         com.hkr.quizme.database_utils.entities.Question dbQuestion = new com.hkr.quizme.database_utils.entities.Question(q.getQuestion());
-                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
-                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
-                        dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
+                        if (q.getCorrectAnswerOne().equals("")) {
+                            Toast.makeText(getContext(), "Must provide at least one correct answer.", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
+                        }
+                        if (q.getWrongAnswerOne().equals("")) {
+                            Toast.makeText(getContext(), "Must provide at least one wrong answer.", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerOne()));
+                        }
+
+                        if (!q.getWrongAnswerTwo().equals("")) {
+                            dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerTwo()));
+                        }
+                        if (!q.getWrongAnswerThree().equals("")) {
+                            dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerThree()));
+                        }
                         if (!q.getWrongAnswerFour().equals("")) {
                             dbQuestion.getAnswers().add(new Answer(false, q.getWrongAnswerFour()));
                         }
-                        dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerOne()));
                         if (!q.getCorrectAnswerTwo().equals("")) {
                             dbQuestion.getAnswers().add(new Answer(true, q.getCorrectAnswerTwo()));
                         }
