@@ -70,6 +70,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
         if (v == signUoBtn) {
             v.startAnimation(animation);
+            if (!isValidEmail(this.email.getText().toString().trim())) {
+                Toast.makeText(getApplicationContext(), "The e-mail address is not valid", Toast.LENGTH_LONG).show();
+                this.email.setText("");
+                return;
+            }
             User user = new User(firstName.getText().toString(), lastName.getText().toString(), email.getText().toString());
             user.hashAndSetPassword(password.getText().toString());
             if (user.checkUniqueEmail(this) && user.register()) {
@@ -192,4 +197,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    public static boolean isValidEmail(CharSequence target) {
+        return target != null && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    }
 }

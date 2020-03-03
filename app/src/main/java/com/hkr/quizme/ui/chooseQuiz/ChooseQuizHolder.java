@@ -23,4 +23,6 @@ public class ChooseQuizHolder extends RecyclerView.ViewHolder {
         rating = itemView.findViewById(R.id.rating_text_view_choose_quiz);
         linearLayout = itemView.findViewById(R.id.clickCardView);
     }
+
+
 }

@@ -56,4 +56,6 @@ public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
     public int getItemCount() {
         return chooseQuizLinkedList.size();
     }
+
+
 }

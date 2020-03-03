@@ -2,20 +2,20 @@ package com.hkr.quizme;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hkr.quizme.database_utils.entities.Answer;
-import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.ui.chooseQuiz.ChooseQuiz;
 import com.hkr.quizme.timers.UpdatingTimer;
@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.List;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener, TimerListener {
-    private final int TIME_TO_ANSWER = 20;
+    private final int TIME_TO_ANSWER = 40;
     private Button button1, button2, button3, button4;
     private TextView timer, totalQuestions, question;
     private UpdatingTimer questionTimer;
@@ -40,7 +40,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         // get the answers of current question
         if (!QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).fetchAnswers()) {
-            Toast.makeText(this, "An error occured, please try again.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "An error occurred, please try again.", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(this, ChooseQuiz.class);
             startActivity(intent);
         }
@@ -83,57 +83,56 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         timer.setText(Integer.toString(TIME_TO_ANSWER));
         handler = new Handler();
         questionTimer = new UpdatingTimer(this, TIME_TO_ANSWER);
+
         new Thread(questionTimer).start();
     }
 
     @Override
     public void onClick(View v) {
         TransitionDrawable transition = (TransitionDrawable) v.getBackground();
-        transition.startTransition(300);
+        transition.startTransition(200);
+
         if (v == button1) {
-            QuizHolder.getInstance().registerUserAnswer(0);
-            /*setTransitionGrey(button2);
+            if (!QuizHolder.getInstance().registerUserAnswer(0)) {
+                transitionWrongAnswer(v);
+            }
+            setTransitionGrey(button2);
             setTransitionGrey(button3);
-            setTransitionGrey(button4);*/
+            setTransitionGrey(button4);
         }
         if (v == button2) {
-            /*setTransitionGrey(button1);
+
+            setTransitionGrey(button1);
             setTransitionGrey(button3);
-            setTransitionGrey(button4);*/
-            QuizHolder.getInstance().registerUserAnswer(1);
+            setTransitionGrey(button4);
+            if (!QuizHolder.getInstance().registerUserAnswer(1)) {
+                transitionWrongAnswer(v);
+            }
         }
         if (v == button3) {
-            /*setTransitionGrey(button2);
+            setTransitionGrey(button2);
             setTransitionGrey(button1);
-            setTransitionGrey(button4);*/
-            QuizHolder.getInstance().registerUserAnswer(2);
+            setTransitionGrey(button4);
+            if (!QuizHolder.getInstance().registerUserAnswer(2)) {
+                transitionWrongAnswer(v);
+            }
         }
         if (v == button4) {
-            /*setTransitionGrey(button2);
+            setTransitionGrey(button2);
             setTransitionGrey(button1);
-            setTransitionGrey(button3);*/
-            QuizHolder.getInstance().registerUserAnswer(3);
+            setTransitionGrey(button3);
+            if (!QuizHolder.getInstance().registerUserAnswer(3)) {
+                transitionWrongAnswer(v);
+            }
         }
         questionTimer.stop();
     }
 
     public void setTransitionGrey(Button button) {
         button.setBackground(getDrawable(R.drawable.transition_button_grey));
-        //TransitionDrawable transition2 = (TransitionDrawable) button.getBackground();
-        //transition2.startTransition(100);
+        TransitionDrawable transition2 = (TransitionDrawable) button.getBackground();
+        transition2.startTransition(200);
         button.setClickable(false);
-        Intent intent = new Intent(QuizActivity.this, QuizActivity.class);
-        startActivity(intent);
-
-        /*new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(QuizActivity.this, QuizActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 300);
-        */
     }
 
     @Override
@@ -149,7 +148,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public synchronized void onTimerStop() {
-        handler.post(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 QuizHolder.getInstance().incrementCurrentQuestion();
@@ -161,7 +160,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intent);
                 }
             }
-        });
+        }, 700);
     }
 
     @Override
@@ -200,4 +199,15 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         warningDialog.show();
     }
+
+
+    public void transitionWrongAnswer(View v) {
+        v.setBackground(getDrawable(R.drawable.transition_button_red));
+        TransitionDrawable transition3 = (TransitionDrawable) v.getBackground();
+        transition3.startTransition(200);
+        Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        assert vibe != null;
+        vibe.vibrate(200);
+    }
+
 }

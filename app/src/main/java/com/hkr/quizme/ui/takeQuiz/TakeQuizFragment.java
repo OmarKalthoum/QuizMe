@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.hkr.quizme.R;
 import com.hkr.quizme.database_utils.entities.Course;
 import com.hkr.quizme.database_utils.entities.Subject;
 import com.hkr.quizme.database_utils.tasks.GetCoursesTask;
+import com.hkr.quizme.ui.chooseQuiz.ChooseQuizFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,7 @@ public class TakeQuizFragment extends Fragment {
 
         return parentObjects;
     }
+
 
 
 }

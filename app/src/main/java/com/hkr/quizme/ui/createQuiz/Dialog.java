@@ -203,6 +203,9 @@ public class Dialog extends DialogFragment implements View.OnClickListener {
                     courseBtn.setText(courseStrings[index]);
                     checkCoursePicked = true;
                 }
+                if (indexTwo != -1) {
+                    subjectBtn.setText("Belongs to subject?");
+                }
             }
         });
         builder.show();

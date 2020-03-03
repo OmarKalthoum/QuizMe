@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 import com.hkr.quizme.global_data.CurrentUser;
+import com.hkr.quizme.ui.chooseQuiz.ChooseQuizFragment;
 import com.hkr.quizme.utils.Rankings;
 
 import java.io.File;
@@ -46,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
         userName = findViewById(R.id.userNameMain);
         rankTextView = findViewById(R.id.RankTextView);
         levelBarMain = findViewById(R.id.levelBarMain);
+        profilPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Animation animation2 = AnimationUtils.loadAnimation(profilPic.getContext(), R.anim.bounce);
+                profilPic.startAnimation(animation2);
+            }
+        });
+
+
+
 
         if (CurrentUser.getInstance().getUser() != null) {
             if (CurrentUser.getInstance().getUser().getImage() != null) {
@@ -57,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             Rankings rankings = new Rankings();
             String ran = rankings.getRanking(CurrentUser.getInstance().getUser()).getName();
             rankTextView.setText(ran);
-            if (ran.equalsIgnoreCase("noob") /*|| ran.equalsIgnoreCase("rookie")*/) {
+            if (ran.equalsIgnoreCase("noob") || ran.equalsIgnoreCase("rookie")) {
                 NavigationView navigationView = findViewById(R.id.nav_view);
                 Menu menuNav = navigationView.getMenu();
                 MenuItem createQuizBtn = menuNav.findItem(R.id.nav_create_quiz);
@@ -97,7 +111,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
         }
+
     }
+
 
     public void getProfileImagePath() {
         String path = Environment.getExternalStorageDirectory().toString();

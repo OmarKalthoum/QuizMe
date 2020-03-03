@@ -47,11 +47,13 @@ public class QuizHolder {
         return points;
     }
 
-    public void registerUserAnswer(int id) {
+    public boolean registerUserAnswer(int id) {
         if (quiz.getQuestions().get(currentQuestion).getAnswers().get(id).isCorrect()) {
             points++;
+            return true;
         }
         Log.d("POIKMS::", Integer.toString(points));
+        return false;
     }
 
     public int getMaxPoints() {

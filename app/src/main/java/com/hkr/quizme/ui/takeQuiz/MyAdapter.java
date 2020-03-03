@@ -1,6 +1,7 @@
 package com.hkr.quizme.ui.takeQuiz;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,11 @@ import android.widget.LinearLayout;
 
 import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
 import com.bignerdranch.expandablerecyclerview.Model.ParentObject;
+import com.hkr.quizme.MainActivity;
 import com.hkr.quizme.R;
 import com.hkr.quizme.database_utils.entities.Subject;
 import com.hkr.quizme.global_data.SubjectHolder;
+import com.hkr.quizme.ui.chooseQuiz.ChooseQuiz;
 import com.hkr.quizme.ui.chooseQuiz.ChooseQuizFragment;
 
 import java.util.ArrayList;
@@ -76,9 +79,11 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
         childViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SubjectHolder.getInstance().setSubject(new Subject(title.getId(), title.getName()));
+                //CANT CHOOSE ANOTHER ITEM IN THE NAVIGATION DRAWER
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 ChooseQuizFragment myFragment = new ChooseQuizFragment();
-                SubjectHolder.getInstance().setSubject(new Subject(title.getId(), title.getName()));
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, myFragment).addToBackStack(null).commit();
             }
         });
@@ -87,6 +92,5 @@ public class MyAdapter extends ExpandableRecyclerAdapter<ParentViewHolder, Child
     @Override
     public void onClick(View v) {
         // TODO : START NEW ACTIVITY
-
     }
 }
