@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,11 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.CurrentUser;
+import com.hkr.quizme.global_data.DisabledQuizzes;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.utils.Rankings;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class QuizResultActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -230,6 +238,19 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void moveToMain() {
+        Calendar date = Calendar.getInstance();
+        long t = date.getTimeInMillis();
+        Timer timer = new Timer(true);
+        final long PERIOD = 60 * 1000 * 5;
+        Date timeout = new Date(t + PERIOD);
+        DisabledQuizzes.getInstance().addQuiz(QuizHolder.getInstance().getQuiz(), timeout);
+        timer.schedule(new TimerTask() {
+            Quiz quiz = QuizHolder.getInstance().getQuiz();
+            @Override
+            public void run() {
+                DisabledQuizzes.getInstance().removeQuiz(quiz);
+            }
+        }, timeout);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
