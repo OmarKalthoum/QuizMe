@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hkr.quizme.QuizActivity;
 import com.hkr.quizme.R;
+import com.hkr.quizme.database_utils.entities.Quiz;
+import com.hkr.quizme.global_data.DisabledQuizzes;
 import com.hkr.quizme.global_data.QuizHolder;
 
 import java.util.LinkedList;
@@ -41,13 +44,18 @@ public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
         holder.title.setText(chooseQuizLinkedList.get(position).getTitle());
         holder.rating.setText(String.format("%.1f/5", chooseQuizLinkedList.get(position).getRating()));
         holder.pos = position;
+        final Quiz quiz = new Quiz(chooseQuizLinkedList.get(position).getId(), chooseQuizLinkedList.get(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Running quiz::", Integer.toString(chooseQuizLinkedList.get(position).getId()));
-                QuizHolder.getInstance().initialize(chooseQuizLinkedList.get(position).getId());
-                Intent intent = new Intent(v.getContext(), QuizActivity.class);
-                v.getContext().startActivity(intent);
+                if (!DisabledQuizzes.getInstance().contains(quiz)) {
+                    Log.d("Running quiz::", Integer.toString(chooseQuizLinkedList.get(position).getId()));
+                    QuizHolder.getInstance().initialize(chooseQuizLinkedList.get(position).getId());
+                    Intent intent = new Intent(v.getContext(), QuizActivity.class);
+                    v.getContext().startActivity(intent);
+                } else {
+                    Toast.makeText(v.getContext(), String.format("%s time until unlock...", DisabledQuizzes.getInstance().getTimeLeft(quiz)), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
