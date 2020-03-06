@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,9 +26,9 @@ public class MyQuizzesFragment extends Fragment {
     private TextView textStatus;
     private RecyclerView recyclerView;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_my_quizzes, container, false);
-
         textStatus = root.findViewById(R.id.text_status_my_quizzes);
         recyclerView = root.findViewById(R.id.recyclerView_my_quizzes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -24,7 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:background="@drawable/e"
+            android:background="@drawable/n"
             android:orientation="vertical"
             android:paddingStart="14dp"
             android:paddingEnd="15dp"
@@ -45,13 +46,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/rating_text_view_my_quizzes"
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rating: "
-                    android:textColor="#ffffff"
-                    android:textSize="20dp"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressBackgroundTint="#555555"
+                    android:scaleX="0.5"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -64,12 +69,12 @@
                     android:text="Delete"
                     android:textColor="#F70000"
                     android:textSize="14dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/rating_text_view_my_quizzes"
+                    app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/rating_text_view_my_quizzes"
-                    app:layout_constraintTop_toTopOf="@+id/rating_text_view_my_quizzes"
-                    app:layout_constraintVertical_bias="0.476" />
+                    app:layout_constraintStart_toEndOf="@+id/ratingBar"
+                    app:layout_constraintTop_toTopOf="@+id/ratingBar"
+                    app:layout_constraintVertical_bias="0.444" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

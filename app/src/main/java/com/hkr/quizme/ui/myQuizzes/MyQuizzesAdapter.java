@@ -48,7 +48,7 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyQuizzesHolder holder, final int position) {
         holder.title.setText(myQuizzes.get(position).getName());
-        holder.rating.setText(Double.toString(myQuizzes.get(position).getRating()) + "/5");
+        holder.ratingBar.setRating((float) myQuizzes.get(position).getRating());
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,13 +84,13 @@ public class MyQuizzesAdapter extends RecyclerView.Adapter<MyQuizzesHolder> {
         okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if ( myQuizzes.get(pos).removeQuiz()) {
-                   Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
-                   myQuizzes.remove(pos);
-                   notifyDataSetChanged();
-               } else {
-                   Toast.makeText(context, "Something went wrong when deleting the quiz...", Toast.LENGTH_LONG).show();
-               }
+                if (myQuizzes.get(pos).removeQuiz()) {
+                    Toast.makeText(context, "Your quiz has been removed", Toast.LENGTH_LONG).show();
+                    myQuizzes.remove(pos);
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(context, "Something went wrong when deleting the quiz...", Toast.LENGTH_LONG).show();
+                }
                 warningDialog.dismiss();
             }
         });

@@ -25,6 +25,7 @@ public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
     private LinkedList<ChooseQuiz> chooseQuizLinkedList;
     private Context context;
 
+
     public ChooseQuizAdapter(LinkedList<ChooseQuiz> chooseQuizLinkedList, Context context) {
         this.chooseQuizLinkedList = chooseQuizLinkedList;
         this.context = context;
@@ -42,7 +43,7 @@ public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
     @Override
     public void onBindViewHolder(@NonNull ChooseQuizHolder holder, final int position) {
         holder.title.setText(chooseQuizLinkedList.get(position).getTitle());
-        holder.rating.setText(String.format("%.1f/5", chooseQuizLinkedList.get(position).getRating()));
+        holder.ratingBar.setRating((float) chooseQuizLinkedList.get(position).getRating());
         holder.pos = position;
         final Quiz quiz = new Quiz(chooseQuizLinkedList.get(position).getId(), chooseQuizLinkedList.get(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
