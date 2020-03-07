@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,14 +22,27 @@ import com.hkr.quizme.database_utils.entities.Quiz;
 import com.hkr.quizme.global_data.CurrentUser;
 import com.hkr.quizme.global_data.DisabledQuizzes;
 import com.hkr.quizme.global_data.QuizHolder;
+import com.hkr.quizme.ui.previousResult.Result;
 import com.hkr.quizme.utils.Rankings;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+import static com.hkr.quizme.QuizActivity.totalQuestionNumbers;
+import static com.hkr.quizme.QuizActivity.totalRightAnswers;
+import static com.hkr.quizme.StartActivity.counterbby;
+import static com.hkr.quizme.ui.chooseQuiz.ChooseQuizAdapter.quizTitle;
 
 public class QuizResultActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,11 +54,13 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     private int counterProgressResult = 0;
     private Handler handler = new Handler();
 
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_result);
+
 
         context = this;
         menuBtn = findViewById(R.id.menuBtn);
@@ -103,6 +117,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
 
         levelInDigits.setText(levelProgBar.getProgress() + "%");
         levelTxt.setText(new Rankings().getRanking(CurrentUser.getInstance().getUser()).getName());
+        addToPrevResult();
         menuBtn.setOnClickListener(this);
         reportBtn.setOnClickListener(this);
     }
@@ -246,11 +261,13 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         DisabledQuizzes.getInstance().addQuiz(QuizHolder.getInstance().getQuiz(), timeout);
         timer.schedule(new TimerTask() {
             Quiz quiz = QuizHolder.getInstance().getQuiz();
+
             @Override
             public void run() {
                 DisabledQuizzes.getInstance().removeQuiz(quiz);
             }
         }, timeout);
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -258,5 +275,31 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
     public void saveRatingToDB() {
         QuizHolder.getInstance().getQuiz().rate(CurrentUser.getInstance().getUser().getId(), rating);
         Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
+    }
+
+    public void addToPrevResult() {
+        String result = totalRightAnswers + "/" + totalQuestionNumbers;
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Result resultObject = new Result(quizTitle, date, result);
+        counterbby = 0;
+        saveResult(resultObject);
+    }
+
+    public void saveResult(Result resultObject) {
+
+        File file = new File(context.getFilesDir(), "" + File.separator + "PREVRESULT.srl");
+        boolean append = file.exists();
+
+        try (
+                FileOutputStream fout = new FileOutputStream(file, append);
+                AppednableOOS oout = new AppednableOOS(fout, append);
+        ) {
+            oout.writeObject(resultObject);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

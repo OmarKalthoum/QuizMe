@@ -33,9 +33,9 @@
                 android:layout_marginTop="5dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Algorithm and data structure"
-                android:textColor="#020000"
+                android:textColor="#AF4141"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="italic" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

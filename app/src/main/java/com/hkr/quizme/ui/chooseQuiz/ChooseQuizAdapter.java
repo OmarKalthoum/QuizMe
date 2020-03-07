@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
 
     private LinkedList<ChooseQuiz> chooseQuizLinkedList;
+    public static String quizTitle;
     private Context context;
 
 
@@ -51,6 +52,7 @@ public class ChooseQuizAdapter extends RecyclerView.Adapter<ChooseQuizHolder> {
             public void onClick(View v) {
                 if (!DisabledQuizzes.getInstance().contains(quiz)) {
                     Log.d("Running quiz::", Integer.toString(chooseQuizLinkedList.get(position).getId()));
+                    quizTitle = chooseQuizLinkedList.get(position).getTitle();
                     QuizHolder.getInstance().initialize(chooseQuizLinkedList.get(position).getId());
                     Intent intent = new Intent(v.getContext(), QuizActivity.class);
                     v.getContext().startActivity(intent);

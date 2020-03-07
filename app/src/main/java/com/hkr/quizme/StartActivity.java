@@ -12,7 +12,7 @@ import android.widget.ImageView;
 
 public class StartActivity extends AppCompatActivity {
     private Context mContext;
-
+    public static int counterbby= 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

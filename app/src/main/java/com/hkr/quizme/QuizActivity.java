@@ -25,18 +25,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
+import static com.hkr.quizme.StartActivity.counterbby;
+
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener, TimerListener {
     private final int TIME_TO_ANSWER = 40;
     private Button button1, button2, button3, button4;
     private TextView timer, totalQuestions, question;
     private UpdatingTimer questionTimer;
     private Handler handler;
+    public static int totalQuestionNumbers;
+    public static int totalRightAnswers;
+
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        if (counterbby == 0) {
+            totalQuestionNumbers = QuizHolder.getInstance().getMaxPoints();
+            totalRightAnswers = totalQuestionNumbers;
+            counterbby++;
+        }
 
         // get the answers of current question
         if (!QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).fetchAnswers()) {
@@ -55,6 +65,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         question = findViewById(R.id.question);
 
         totalQuestions.setText(String.format("%d/%d", QuizHolder.getInstance().getCurrentQuestion() + 1, QuizHolder.getInstance().getMaxPoints()));
+
 
         question.setText(QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getQuestion());
         List<Answer> answers = QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).getAnswers();
@@ -95,6 +106,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         if (v == button1) {
             if (!QuizHolder.getInstance().registerUserAnswer(0)) {
                 transitionWrongAnswer(v);
+
             }
             setTransitionGrey(button2);
             setTransitionGrey(button3);
@@ -202,6 +214,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
 
     public void transitionWrongAnswer(View v) {
+        totalRightAnswers--;
         v.setBackground(getDrawable(R.drawable.transition_button_red));
         TransitionDrawable transition3 = (TransitionDrawable) v.getBackground();
         transition3.startTransition(200);
