@@ -10,6 +10,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -50,7 +51,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         // get the answers of current question
         if (!QuizHolder.getInstance().getQuiz().getQuestions().get(QuizHolder.getInstance().getCurrentQuestion()).fetchAnswers()) {
-            Toast.makeText(this, "An error occurred, please try again.", Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(this,"An error occurred, please try again.", Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
             Intent intent = new Intent(this, ChooseQuiz.class);
             startActivity(intent);
         }

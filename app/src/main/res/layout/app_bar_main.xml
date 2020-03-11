@@ -62,7 +62,7 @@
                     android:layout_marginBottom="20dp"
                     android:text="LEGEND"
                     android:textColor="#FFC107"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.75"
                     app:layout_constraintBottom_toTopOf="@+id/levelBarMain"

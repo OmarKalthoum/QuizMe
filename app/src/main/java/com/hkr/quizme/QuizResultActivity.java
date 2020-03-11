@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,6 +25,7 @@ import com.hkr.quizme.global_data.DisabledQuizzes;
 import com.hkr.quizme.global_data.QuizHolder;
 import com.hkr.quizme.ui.previousResult.Result;
 import com.hkr.quizme.utils.Rankings;
+import com.plattysoft.leonids.ParticleSystem;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,7 +34,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -72,6 +73,7 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         resultProgBar = findViewById(R.id.resultProgBar);
         levelProgBar = findViewById(R.id.levelProgBar);
 
+
         if (QuizHolder.getInstance().getResultPercentage() != 0) {
             new Thread(new Runnable() {
                 @Override
@@ -88,10 +90,12 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
                                     resultComment.setText("GOOD JOB " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
                                 } else if (counterProgressResult < 85) {
                                     resultComment.setText("GREAT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
+                                    animAllAnswersCorrect();
                                 } else {
                                     resultComment.setText("EXCELLENT " + CurrentUser.getInstance().getUser().getFirstName().toUpperCase());
                                     if (counterProgressResult == 100) {
                                         Snackbar.make(resultProgBar, "You did amazing in this quiz. Well done!", Snackbar.LENGTH_LONG).show();
+                                        animAllAnswersCorrect();
                                     }
                                 }
                             }
@@ -155,6 +159,10 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         final TextView feedbackContent = feedBackDialog.findViewById(R.id.feedback_content);
         final Button submitBtn = feedBackDialog.findViewById(R.id.ok_button);
         final Button cancelBtn = feedBackDialog.findViewById(R.id.cancel_button);
+        feedBackName.setText(CurrentUser.getInstance().getUser().getFirstName() + " " + CurrentUser.getInstance().getUser().getLastName());
+        feedBackName.setEnabled(false);
+        feedbackEmail.setText(CurrentUser.getInstance().getUser().getEmail());
+        feedbackEmail.setEnabled(false);
 
         feedBackDialog.setCancelable(false);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -167,13 +175,16 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = feedBackName.getText().toString();
-                String email = feedbackEmail.getText().toString();
                 String content = feedbackContent.getText().toString();
-
-                //TODO: Take the information and send it via mail
-                Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
-                feedBackDialog.dismiss();
+                if (content.isEmpty()) {
+                    Toast toast = Toast.makeText(context, "Please provide us with your opinions!", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else {
+                    //TODO: Take the information and send it via mail
+                    Toast.makeText(context, "Thank you for giving your feedback!", Toast.LENGTH_LONG).show();
+                    feedBackDialog.dismiss();
+                }
             }
         });
 
@@ -301,5 +312,11 @@ public class QuizResultActivity extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
 
+    }
+
+    public void animAllAnswersCorrect() {
+        new ParticleSystem(this, 20, R.drawable.amazing_icon, 5000)
+                .setSpeedRange(0.02f, 0.4f)
+                .oneShot(levelInDigits, 100);
     }
 }

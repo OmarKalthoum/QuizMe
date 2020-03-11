@@ -24,6 +24,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.hkr.quizme.database_utils.entities.User;
 import com.hkr.quizme.global_data.CurrentUser;
+import com.plattysoft.leonids.ParticleSystem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -74,6 +75,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.blink_anim);
 
         if (v == logInBtn) {
+
             v.startAnimation(animation);
             // TODO: If the user press the log in button
             User user = new User(emailInput.getText().toString());
@@ -95,6 +97,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         }
 
         if (v == logoBtn) {
+
             //Shake the logo
             Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.shakeanimation);
             v.startAnimation(animation2);
